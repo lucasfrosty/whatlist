@@ -1,5 +1,17 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import App from './components/App';
+import { BrowserRouter, Route, Switch } from 'react-router-dom';
 
-ReactDOM.render(<App />, document.querySelector('#root'));
+import App from './components/App';
+import Login from './components/Login';
+
+
+ReactDOM.render(
+  <BrowserRouter>
+    <Switch>
+      <Route path="/login" component={Login} />
+      <Route path="/" component={App} />
+    </Switch>
+  </BrowserRouter>,
+  document.querySelector('#root'),
+);
