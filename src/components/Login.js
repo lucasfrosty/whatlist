@@ -1,19 +1,23 @@
 import React from 'react';
+import { Redirect } from 'react-router-dom';
 
 class Login extends React.Component {
   componentDidMount() {
-    console.log('xD');
+    console.log('Login');
   }
 
   render() {
     return (
-      <div>
-        <button>Login with Facebook</button>
-        <button>Login with Github</button>
-      </div>
+      !this.props.auth ? (
+        <div>
+          <button onClick={() => this.props.setAuth(true)}>Login with Facebook</button>
+          <button>Login with Github</button>
+        </div>
+      ) : (
+        <Redirect to="/" />
+      )
     );
   }
-
 }
 
 export default Login;

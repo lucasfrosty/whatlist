@@ -1,15 +1,15 @@
-import { SET_LOGGED_INFO } from './types';
+import { SET_AUTH } from './types';
 
 const initialState = {
-  isLogged: false,
+  auth: false,
 };
 
 export default (state = initialState, action) => {
   switch (action.type) {
-    case SET_LOGGED_INFO:
+    case SET_AUTH:
       return {
         ...state,
-        isLogged: action.payload,
+        auth: action.payload,
       };
     default:
       return state;

@@ -1,1 +1,1 @@
-export const SET_LOGGED_INFO = 'SET_LOGGED_INFO';
+export const SET_AUTH = 'SET_AUTH';

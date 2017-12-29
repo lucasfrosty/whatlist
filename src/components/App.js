@@ -1,14 +1,42 @@
 import React from 'react';
-import { Redirect } from 'react-router-dom';
+import PropTypes from 'prop-types';
+import { connect } from 'react-redux';
+import { BrowserRouter, Route, Switch } from 'react-router-dom';
+
+import { setAuth } from '../dataflow/actions';
+import Login from './Login';
+import Home from './Home';
 
 class App extends React.Component {
-  state = {
-    isLogged: false,
+  static propTypes = {
+    auth: PropTypes.bool.isRequired,
+    setAuth: PropTypes.func.isRequired,
+  };
+
+  componentDidMount() {
+    console.log('xD');
   }
 
   render() {
-    return this.state.isLogged ? <h1>:)</h1> : <Redirect to="/login" />;
+    return (
+      <BrowserRouter>
+        <Switch>
+          <Route path="/login" component={() => <Login auth={this.props.auth} setAuth={this.props.setAuth} />} />
+          <Route path="/" component={Home} />
+        </Switch>
+      </BrowserRouter>
+    );
   }
 }
 
-export default App;
+const mapStateToProps = state => ({
+  auth: state.auth,
+});
+
+const mapDispatchToProps = dispatch => ({
+  setAuth: (payload) => {
+    dispatch(setAuth(payload));
+  },
+});
+
+export default connect(mapStateToProps, mapDispatchToProps)(App);
