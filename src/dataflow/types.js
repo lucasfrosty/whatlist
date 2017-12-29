@@ -1,0 +1,1 @@
+export const SET_LOGGED_INFO = 'SET_LOGGED_INFO';
