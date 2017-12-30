@@ -9,7 +9,8 @@ export default (state = initialState, action) => {
     case SET_AUTH:
       return {
         ...state,
-        auth: action.payload,
+        user: action.payload.user,
+        auth: action.payload.auth,
       };
     default:
       return state;

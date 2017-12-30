@@ -14,7 +14,7 @@ class App extends React.Component {
   };
 
   componentDidMount() {
-    console.log('xD');
+    console.log('App rendered');
   }
 
   render() {
@@ -22,7 +22,7 @@ class App extends React.Component {
       <BrowserRouter>
         <Switch>
           <Route path="/login" component={() => <Login auth={this.props.auth} setAuth={this.props.setAuth} />} />
-          <Route path="/" component={Home} />
+          <Route path="/" component={() => <Home auth={this.props.auth} />} />
         </Switch>
       </BrowserRouter>
     );
