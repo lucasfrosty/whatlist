@@ -1,5 +1,6 @@
 import createSagaMiddleware from 'redux-saga';
 import { createStore, applyMiddleware, compose } from 'redux';
+import throttle from 'lodash/throttle';
 
 import { loadState, saveState } from './utils/localStorage';
 // import mainSaga from './dataflow/saga';
@@ -14,10 +15,10 @@ const persistedState = loadState();
 const store = createStore(reducer, persistedState, composeEnhancers(middleware));
 
 // setting localStorage
-store.subscribe(() => {
+store.subscribe(throttle(() => {
   const { auth, user } = store.getState();
   saveState({ auth, user });
-});
+}, 1000));
 
 // sagaMiddleware.run(mainSaga);
 
