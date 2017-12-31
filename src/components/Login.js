@@ -6,24 +6,23 @@ import firebase, { facebookProvider } from '../utils/firebase';
 
 class Login extends React.Component {
   static propTypes = {
-    setAuth: PropTypes.func.isRequired,
+    onUserLogin: PropTypes.func.isRequired,
     auth: PropTypes.bool.isRequired,
   }
 
   loginWithFacebook = () => {
     firebase.auth().signInWithPopup(facebookProvider).then((res) => {
       const { user, credential } = res;
+      const { name, email, photoURL } = user;
 
-      console.log('Token > ', credential.accessToken);
-      console.log('User > ', user);
-
-      this.props.setAuth({
-        user: {
-          name: user.displayName,
-          email: user.email,
-          photoURL: user.photoURL,
-        },
+      this.props.onUserLogin({
         auth: true,
+        user: {
+          name,
+          email,
+          photoURL,
+          token: credential.accessToken,
+        },
       });
     }).catch((err) => {
       console.log(err);
@@ -31,8 +30,8 @@ class Login extends React.Component {
   }
 
   render() {
-    const componentToRender = (isAuth) => {
-      if (isAuth) return <Redirect to="/" />;
+    const getComponent = (auth) => {
+      if (auth) return <Redirect to="/" />;
 
       return (
         <div>
@@ -42,7 +41,7 @@ class Login extends React.Component {
       );
     };
 
-    return componentToRender(this.props.auth);
+    return getComponent(this.props.auth);
   }
 }
 

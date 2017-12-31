@@ -1,4 +1,4 @@
-import { SET_AUTH } from './types';
+import { USER_LOGIN, USER_LOGOFF } from './types';
 
 const initialState = {
   auth: false,
@@ -6,11 +6,17 @@ const initialState = {
 
 export default (state = initialState, action) => {
   switch (action.type) {
-    case SET_AUTH:
+    case USER_LOGIN:
       return {
         ...state,
-        user: action.payload.user,
         auth: action.payload.auth,
+        user: action.payload.user,
+      };
+    case USER_LOGOFF:
+      return {
+        ...state,
+        auth: false,
+        user: undefined,
       };
     default:
       return state;
