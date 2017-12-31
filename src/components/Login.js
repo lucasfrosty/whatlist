@@ -8,7 +8,7 @@ class Login extends React.Component {
   static propTypes = {
     onUserLogin: PropTypes.func.isRequired,
     auth: PropTypes.bool.isRequired,
-    location: PropTypes.objectOf(PropTypes.string).isRequired,
+    location: PropTypes.objectOf(PropTypes.any).isRequired,
   }
 
   loginWithFacebook = () => {
@@ -31,6 +31,7 @@ class Login extends React.Component {
   }
 
   render() {
+    console.log('XDD', this.props.location);
     const { from } = this.props.location.state || { from: { pathname: '/' } };
 
     return (
@@ -38,6 +39,7 @@ class Login extends React.Component {
         ? <Redirect to={from} />
         : (
           <div>
+            <p>Login into {from.pathname}</p>
             <button onClick={this.loginWithFacebook}>Login with Facebook</button>
             <button>Login with Github</button>
           </div>

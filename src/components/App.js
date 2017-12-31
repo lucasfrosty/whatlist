@@ -6,7 +6,9 @@ import { BrowserRouter, Route, Switch } from 'react-router-dom';
 import { userLogin, userLogoff } from '../dataflow/actions';
 import Login from './Login';
 import Home from './Home';
-// import ProtectedRoute from './ProtectedRoute';
+import ProtectedRoute from './ProtectedRoute';
+
+const Teste = () => <h1>Teste</h1>;
 
 class App extends React.Component {
   static propTypes = {
@@ -25,10 +27,12 @@ class App extends React.Component {
       <BrowserRouter>
         <Switch>
           <Route
-            path="/login"
-            component={() => <Login auth={auth} onUserLogin={onUserLogin} />}
+            exact
+            path="/"
+            component={() => <Home auth={auth} onUserLogoff={onUserLogoff} />}
           />
-          <Route path="/" component={() => <Home auth={auth} onUserLogoff={onUserLogoff} />} />
+          <Route path="/login" component={() => <Login auth={auth} onUserLogin={onUserLogin} />} />
+          <ProtectedRoute path="/teste" component={Teste} />
         </Switch>
       </BrowserRouter>
     );
