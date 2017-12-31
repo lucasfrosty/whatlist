@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import styled from 'styled-components';
 import PropTypes from 'prop-types';
-import { Card, Icon, Image } from 'semantic-ui-react';
+import { Card, Icon, Image, Button } from 'semantic-ui-react';
 
 import convertDate from '../utils/convertDate';
 import { convertGenres, getImage } from '../utils/api';
@@ -14,44 +14,65 @@ const Rating = styled.span`
   }
 `;
 
+const Meta = styled.span`
+  font-size: 12px;
+`;
 
 class CardInfo extends Component {
   state = {
     genresToString: undefined,
-  }
+  };
 
   componentDidMount() {
     const { type, genre_ids } = this.props.info;
-    convertGenres(genre_ids, type)
-      .then(genres => this.setState({ genresToString: genres }));
+    convertGenres(genre_ids, type).then(genres => this.setState({ genresToString: genres }));
   }
 
+  truncateWord = (str, len) => {
+    let trimmedString = str.substr(0, len);
+    trimmedString = trimmedString.substr(0, Math.min(trimmedString.length, trimmedString.lastIndexOf(' ')));
+
+    return trimmedString;
+  }
 
   render() {
-    console.log(this.props.info);
     const {
-      title, name, release_date, overview, vote_average, poster_path,
+      title, name, release_date, overview, vote_average, backdrop_path,
     } = this.props.info;
+    console.log(this.props.info);
     return (
-      <Card>
-        <Image src={getImage(poster_path, 300)} />
-        <Card.Content>
-          <Card.Header>
-            {title || name}
-            <Rating>
-              <Icon color="yellow" name="star" />
-              {vote_average}
-            </Rating>
-          </Card.Header>
-          <Card.Meta>
-            <span className="date">{release_date && `Released in ${convertDate(release_date)}`}</span>
-          </Card.Meta>
-          <Card.Description>{overview}</Card.Description>
-        </Card.Content>
-        <Card.Content extra>
-          <p>{this.state.genresToString}</p>
-        </Card.Content>
-      </Card>
+      <div>
+        <Card>
+          <Image size="medium" fluid centered src={getImage(backdrop_path, 300)} />
+          <Card.Content>
+            <Card.Header>
+              {title || name}
+              <Rating>
+                <Icon color="yellow" name="star" />
+                {vote_average}
+              </Rating>
+            </Card.Header>
+            <Card.Meta>
+              <Meta>
+                {release_date && `Released in ${convertDate(release_date)}`}
+              </Meta>
+            </Card.Meta>
+            {/* <Card.Description>{overview}</Card.Description> */}
+            <Card.Description extra>
+              <p>
+                {overview.length > 120
+                  ? `${this.truncateWord(overview, 120)}...`
+                  : overview
+                }
+              </p>
+              <Button size="mini" content="Details" color="teal" />
+            </Card.Description>
+          </Card.Content>
+          <Card.Content extra style={{ padding: '0.3em 1em 0.6em' }}>
+            <Meta>{this.state.genresToString}</Meta>
+          </Card.Content>
+        </Card>
+      </div>
     );
   }
 }

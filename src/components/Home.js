@@ -1,6 +1,7 @@
 import React, { Fragment, Component } from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
+import { Dimmer, Loader } from 'semantic-ui-react';
 
 // pres components
 import Card from './Card';
@@ -29,7 +30,14 @@ class Home extends Component {
     return (
       <Fragment>
         <h1>To watch list;</h1>
-        {popularMovies ? popularMovies.map(movie => <Card key={movie.id} info={movie} />) : 'Loading...'}
+        {popularMovies
+          ? popularMovies.map(movie => <Card key={movie.id} info={movie} />)
+          : (
+            <Dimmer active inverted>
+              <Loader>Loading...</Loader>
+            </Dimmer>
+          )
+        }
       </Fragment>
     );
   }
