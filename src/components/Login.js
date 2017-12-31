@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Redirect } from 'react-router-dom';
+import { Redirect, withRouter } from 'react-router-dom';
 
 import firebase, { facebookProvider } from '../utils/firebase';
 
@@ -8,6 +8,7 @@ class Login extends React.Component {
   static propTypes = {
     onUserLogin: PropTypes.func.isRequired,
     auth: PropTypes.bool.isRequired,
+    location: PropTypes.objectOf(PropTypes.string).isRequired,
   }
 
   loginWithFacebook = () => {
@@ -30,19 +31,19 @@ class Login extends React.Component {
   }
 
   render() {
-    const getComponent = (auth) => {
-      if (auth) return <Redirect to="/" />;
+    const { from } = this.props.location.state || { from: { pathname: '/' } };
 
-      return (
-        <div>
-          <button onClick={this.loginWithFacebook}>Login with Facebook</button>
-          <button>Login with Github</button>
-        </div>
-      );
-    };
-
-    return getComponent(this.props.auth);
+    return (
+      this.props.auth
+        ? <Redirect to={from} />
+        : (
+          <div>
+            <button onClick={this.loginWithFacebook}>Login with Facebook</button>
+            <button>Login with Github</button>
+          </div>
+        )
+    );
   }
 }
 
-export default Login;
+export default withRouter(Login);
