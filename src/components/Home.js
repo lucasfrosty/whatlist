@@ -17,10 +17,8 @@ class Home extends Component {
   }
 
   componentDidMount() {
-    getPopular(TYPES.movie).then(res =>
-      this.setState({
-        popularMovies: res.map(r => ({ ...r, type: TYPES.movie })),
-      }));
+    getPopular(TYPES.movie)
+      .then(res => this.setState({ popularMovies: res }));
 
 
     // getPopular(TYPES.tv).then(r => this.setState({ popularSeries: r }));

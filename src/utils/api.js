@@ -71,8 +71,9 @@ export const getPopular = async (type) => {
 
     const response = await axios(URL);
     const results = await response.data.results;
+    const resultsWithType = results.map(r => ({ ...r, type }));
 
-    return results;
+    return resultsWithType;
   } catch (e) {
     console.error(e);
   }
