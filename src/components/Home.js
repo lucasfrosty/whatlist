@@ -13,11 +13,16 @@ import { userLogin, userLogoff } from '../dataflow/actions';
 class Home extends Component {
   state = {
     popularMovies: undefined,
-    popularSeries: undefined,
+    // popularSeries: undefined,
   }
 
   componentDidMount() {
-    getPopular(TYPES.movie).then(res => this.setState({ popularMovies: res }));
+    getPopular(TYPES.movie).then(res =>
+      this.setState({
+        popularMovies: res.map(r => ({ ...r, type: TYPES.movie })),
+      }));
+
+
     // getPopular(TYPES.tv).then(r => this.setState({ popularSeries: r }));
   }
 
@@ -26,7 +31,7 @@ class Home extends Component {
     return (
       <Fragment>
         <h1>To watch list;</h1>
-        {popularMovies ? popularMovies.map(movie => <Card info={movie} />) : 'Loading...'}
+        {popularMovies ? popularMovies.map(movie => <Card key={movie.id} info={movie} />) : 'Loading...'}
       </Fragment>
     );
   }

@@ -37,16 +37,8 @@ export const getApiURL = async (query, type) => {
  * @param {number} size - the size of the image
  * @returns {string} - The image URL
  */
-export const getImage = async (image_path, size) => {
-  try {
-    const URL = `https://image.tmdb.org/t/p/w${size}${image_path}`;
-
-    const response = await axios(URL);
-    return response.data.results;
-  } catch (e) {
-    console.error(e);
-  }
-};
+export const getImage = (image_path, size) =>
+  `https://image.tmdb.org/t/p/w${size}${image_path}`;
 
 
 /**
@@ -56,7 +48,7 @@ export const getImage = async (image_path, size) => {
  * @param {string} selector - A query selector to define where to put the list converted
  * @returns nothing (i'm not happy with this approach but was the only way i founded)
  */
-export const convertAndDisplayGenres = async (genres, type) => {
+export const convertGenres = async (genres, type) => {
   try {
     const genresURL = `https://api.themoviedb.org/3/genre/${type}/list?api_key=${API_KEY}&language=en-US`;
     console.log('Requesting data from ', URL);
@@ -66,7 +58,7 @@ export const convertAndDisplayGenres = async (genres, type) => {
     const result = await genres.map(genre =>
       genresListFromAPI.filter(genreFromAPI => genreFromAPI.id === genre).map(g => g.name));
 
-    return result;
+    return result.join(', ');
   } catch (e) {
     console.error(e);
   }
