@@ -1,17 +1,50 @@
-import React, { Fragment } from 'react';
-import { Link } from 'react-router-dom';
+import React, { Fragment, Component } from 'react';
+import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 
-const Home = ({ auth, onUserLogoff }) => (
-  <Fragment>
-    <h1>To watch list;</h1>
-    {auth ? <button onClick={onUserLogoff}>Logoff</button> : <Link to="/login">Sign In</Link>}
-  </Fragment>
-);
+// pres components
+import Card from './Card';
+
+// data
+import { getPopular, TYPES } from '../utils/api';
+import { userLogin, userLogoff } from '../dataflow/actions';
+
+
+class Home extends Component {
+  state = {
+    popularMovies: undefined,
+    popularSeries: undefined,
+  }
+
+  componentDidMount() {
+    getPopular(TYPES.movie).then(res => this.setState({ popularMovies: res }));
+    // getPopular(TYPES.tv).then(r => this.setState({ popularSeries: r }));
+  }
+
+  render() {
+    const { popularMovies } = this.state;
+    return (
+      <Fragment>
+        <h1>To watch list;</h1>
+        {popularMovies ? popularMovies.map(movie => <Card info={movie} />) : 'Loading...'}
+      </Fragment>
+    );
+  }
+}
+
+const mapStateToProps = state => ({
+  auth: state.auth,
+});
+
+const mapDispatchToProps = {
+  onUserLogin: userLogin,
+  onUserLogoff: userLogoff,
+};
 
 Home.propTypes = {
   auth: PropTypes.bool.isRequired,
+  onUserLogin: PropTypes.func.isRequired,
   onUserLogoff: PropTypes.func.isRequired,
 };
 
-export default Home;
+export default connect(mapStateToProps, mapDispatchToProps)(Home);

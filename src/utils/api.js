@@ -2,6 +2,11 @@ import axios from 'axios';
 
 const API_KEY = process.env.REACT_APP_API_KEY;
 
+export const TYPES = {
+  movie: 'movie',
+  tv: 'tv',
+};
+
 /**
  * @param {string} query - The name of the Movie or TV Show
  * @param {string: 'movie' or 'tv'} type - Defining if it is a Movie or a TV Show
@@ -9,7 +14,10 @@ const API_KEY = process.env.REACT_APP_API_KEY;
  */
 export const getApiURL = (query, type) => {
   if (type === 'tv' || type === 'movie') {
-    return `https://api.themoviedb.org/3/search/${type}?api_key=${API_KEY}&language=en-US&query=${query}&page=1`;
+    const URL =
+      `https://api.themoviedb.org/3/search/${type}?api_key=${API_KEY}&language=en-US&query=${query}&page=1`;
+
+    return axios(URL).then(response => response.data.results);
   }
 
   return null;
@@ -21,7 +29,11 @@ export const getApiURL = (query, type) => {
  * @param {number} size - the size of the image
  * @returns {string} - The image URL
  */
-export const getImgURL = (image_path, size) => `https://image.tmdb.org/t/p/w${size}${image_path}`;
+export const getImage = (image_path, size) => {
+  const URL = `https://image.tmdb.org/t/p/w${size}${image_path}`;
+
+  return axios(URL).then(response => response.data.results);
+};
 
 
 /**
@@ -35,8 +47,7 @@ export const convertAndDisplayGenres = (genres, type, selector) => {
   const genresURL = `https://api.themoviedb.org/3/genre/${type}/list?api_key=${API_KEY}&language=en-US`;
   console.log('Requesting data from ', URL);
 
-  axios
-    .get(genresURL)
+  axios(genresURL)
     .then(response => response.data.genres)
     .then((genresListFromAPI) => {
       const genresToString = genres.map(genre =>
@@ -46,3 +57,11 @@ export const convertAndDisplayGenres = (genres, type, selector) => {
     })
     .catch(err => console.error(err));
 };
+
+export const getPopular = (type) => {
+  const URL =
+    `https://api.themoviedb.org/3/${type}/popular?api_key=${API_KEY}&language=en-US&page=1`;
+
+  return axios(URL).then(response => response.data.results);
+};
+
