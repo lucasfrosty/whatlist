@@ -35,16 +35,18 @@ class Home extends Component {
     const displayCards = contentArray =>
       contentArray.map((movie, index) => <Card hidden={index >= 10} key={movie.id} info={movie} />);
 
+    if (content === undefined) {
+      return (
+        <Dimmer active inverted>
+          <Loader>Loading...</Loader>
+        </Dimmer>
+      );
+    }
+
     return (
       <Tab.Pane>
         <CardContainer>
-          {content !== undefined ? (
-            displayCards(content)
-          ) : (
-            <Dimmer active inverted>
-              <Loader>Loading...</Loader>
-            </Dimmer>
-          )}
+          {displayCards(content)}
         </CardContainer>
       </Tab.Pane>
     );

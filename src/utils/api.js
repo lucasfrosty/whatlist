@@ -1,7 +1,7 @@
 /* eslint-disable consistent-return */
 import axios from 'axios';
 
-const API_KEY = process.env.REACT_APP_API_KEY;
+const API_KEY = process.env.REACT_APP_TMDB_API_KEY;
 
 export const TYPES = {
   movie: 'movie',
@@ -48,14 +48,15 @@ export const getImage = (image_path, size) =>
  * @param {string} selector - A query selector to define where to put the list converted
  * @returns nothing (i'm not happy with this approach but was the only way i founded)
  */
-export const convertGenres = async (genres, type) => {
+export const convertGenresArray = async (genresArray, type) => {
   try {
     const genresURL = `https://api.themoviedb.org/3/genre/${type}/list?api_key=${API_KEY}&language=en-US`;
 
     const request = await axios(genresURL);
     const genresListFromAPI = await request.data.genres;
-    const result = await genres.map(genre =>
-      genresListFromAPI.filter(genreFromAPI => genreFromAPI.id === genre).map(g => g.name));
+
+    const result = genresArray.map(genres => genres.map(genre =>
+      genresListFromAPI.filter(genreFromAPI => genreFromAPI.id === genre).map(g => g.name)));
 
     return result.join(', ');
   } catch (e) {
@@ -70,11 +71,10 @@ export const getPopular = async (type) => {
 
     const response = await axios(URL);
     const results = await response.data.results;
-
-    const resultsWithType = results.map(async (r) => {
-      const genresToString = await convertGenres(r.genre_ids, type);
-      return ({ ...r, type, genresToString });
-    });
+    const resultGenresArrays = results.map(r => r.genre_ids);
+    const genresToString = await convertGenresArray(resultGenresArrays, type);
+    const resultsWithType =
+      results.map((r, index) => ({ ...r, type, genresToString: genresToString[index] }));
 
     return Promise.all(resultsWithType);
   } catch (e) {
