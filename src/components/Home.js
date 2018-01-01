@@ -2,7 +2,7 @@ import React, { Fragment, Component } from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
-import { Dimmer, Loader } from 'semantic-ui-react';
+import { Dimmer, Loader, Tab } from 'semantic-ui-react';
 
 // pres components
 import Card from './Card';
@@ -15,46 +15,53 @@ const CardContainer = styled.div`
   display: flex;
   flex-wrap: wrap;
   justify-content: center;
-  width: 90%;
+  width: 95%;
   margin: auto;
 `;
-
 
 class Home extends Component {
   state = {
     popularMovies: undefined,
-    // popularSeries: undefined,
-  }
+    popularTV: undefined,
+  };
 
   componentDidMount() {
-    getPopular(TYPES.movie)
-      .then(res => this.setState({ popularMovies: res }));
+    getPopular(TYPES.movie).then(res => this.setState({ popularMovies: res }));
+
+    getPopular(TYPES.tv).then(res => this.setState({ popularTV: res }));
+  }
 
 
-    // getPopular(TYPES.tv).then(r => this.setState({ popularSeries: r }));
+  renderTabPane = (content) => {
+    const displayCards = contentArray =>
+      contentArray.map((movie, index) => <Card hidden={index >= 10} key={movie.id} info={movie} />);
+
+    return (
+      <Tab.Pane>
+        <CardContainer>
+          {content ? (
+            displayCards(content)
+          ) : (
+            <Dimmer active inverted>
+              <Loader>Loading...</Loader>
+            </Dimmer>
+          )}
+        </CardContainer>
+      </Tab.Pane>
+    );
   }
 
   render() {
-    const { popularMovies } = this.state;
+    const { popularMovies, popularTV } = this.state;
+    const panes = [
+      { menuItem: 'Movies', render: () => this.renderTabPane(popularMovies) },
+      { menuItem: 'TV', render: () => this.renderTabPane(popularTV) },
+    ];
+
     return (
       <Fragment>
         <h1>To watch list;</h1>
-        <CardContainer>
-          {popularMovies
-            ? popularMovies.map((movie, index) => (
-              <Card
-                hidden={index >= 10}
-                key={movie.id}
-                info={movie}
-              />
-           ))
-            : (
-              <Dimmer active inverted>
-                <Loader>Loading...</Loader>
-              </Dimmer>
-            )
-          }
-        </CardContainer>
+        <Tab panes={panes} />
       </Fragment>
     );
   }
