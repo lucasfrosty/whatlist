@@ -1,10 +1,15 @@
 import React, { Component } from 'react';
 import styled from 'styled-components';
 import PropTypes from 'prop-types';
-import { Card, Icon, Image, Button } from 'semantic-ui-react';
+import { Card, Icon, Image } from 'semantic-ui-react';
 
 import convertDate from '../utils/convertDate';
 import { convertGenres, getImage } from '../utils/api';
+
+const Container = styled.div`
+  display: ${props => (props.hidden ? 'none' : 'block')};
+  margin: 0 5px 30px 5px;
+`;
 
 const Rating = styled.span`
   float: right;
@@ -41,9 +46,9 @@ class CardInfo extends Component {
     } = this.props.info;
     console.log(this.props.info);
     return (
-      <div style={{ marginBottom: 30 }}>
+      <Container hidden={this.props.hidden}>
         <Card style={{ height: '100%' }}>
-          <Image size="medium" fluid centered src={getImage(backdrop_path, 300)} />
+          <Image fluid centered src={getImage(backdrop_path, 300)} />
           <Card.Content>
             <Card.Header>
               {title || name}
@@ -71,13 +76,18 @@ class CardInfo extends Component {
             <Meta>{this.state.genresToString}</Meta>
           </Card.Content>
         </Card>
-      </div>
+      </Container>
     );
   }
 }
 
+CardInfo.defaultProps = {
+  hidden: false,
+};
+
 CardInfo.propTypes = {
   info: PropTypes.objectOf(PropTypes.any).isRequired,
+  hidden: PropTypes.bool,
 };
 
 export default CardInfo;

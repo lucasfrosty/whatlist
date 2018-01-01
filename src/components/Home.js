@@ -14,7 +14,9 @@ import { userLogin, userLogoff } from '../dataflow/actions';
 const CardContainer = styled.div`
   display: flex;
   flex-wrap: wrap;
-  justify-content: space-evenly;
+  justify-content: center;
+  width: 90%;
+  margin: auto;
 `;
 
 
@@ -39,7 +41,13 @@ class Home extends Component {
         <h1>To watch list;</h1>
         <CardContainer>
           {popularMovies
-            ? popularMovies.map(movie => <Card key={movie.id} info={movie} />)
+            ? popularMovies.map((movie, index) => (
+              <Card
+                hidden={index >= 10}
+                key={movie.id}
+                info={movie}
+              />
+           ))
             : (
               <Dimmer active inverted>
                 <Loader>Loading...</Loader>
