@@ -27,7 +27,6 @@ class Home extends Component {
 
   componentDidMount() {
     getPopular(TYPES.movie).then(res => this.setState({ popularMovies: res }));
-
     getPopular(TYPES.tv).then(res => this.setState({ popularTV: res }));
   }
 
@@ -39,7 +38,7 @@ class Home extends Component {
     return (
       <Tab.Pane>
         <CardContainer>
-          {content ? (
+          {content !== undefined ? (
             displayCards(content)
           ) : (
             <Dimmer active inverted>

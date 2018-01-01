@@ -4,7 +4,7 @@ import PropTypes from 'prop-types';
 import { Card, Icon, Image } from 'semantic-ui-react';
 
 import convertDate from '../utils/convertDate';
-import { convertGenres, getImage } from '../utils/api';
+import { getImage } from '../utils/api';
 
 const Container = styled.div`
   display: ${props => (props.hidden ? 'none' : 'block')};
@@ -24,15 +24,6 @@ const Meta = styled.span`
 `;
 
 class CardInfo extends Component {
-  state = {
-    genresToString: undefined,
-  };
-
-  componentDidMount() {
-    const { type, genre_ids } = this.props.info;
-    convertGenres(genre_ids, type).then(genres => this.setState({ genresToString: genres }));
-  }
-
   truncateWord = (str, len) => {
     let trimmedString = str.substr(0, len);
     trimmedString = trimmedString.substr(0, Math.min(trimmedString.length, trimmedString.lastIndexOf(' ')));
@@ -42,9 +33,8 @@ class CardInfo extends Component {
 
   render() {
     const {
-      title, name, release_date, overview, vote_average, backdrop_path,
+      title, name, release_date, overview, vote_average, backdrop_path, genresToString
     } = this.props.info;
-    console.log(this.props.info);
     return (
       <Container hidden={this.props.hidden}>
         <Card style={{ height: '100%' }}>
@@ -69,11 +59,10 @@ class CardInfo extends Component {
                   : overview
                 }
               </p>
-              {/* <Button size="mini" content="Details" color="teal" /> */}
             </Card.Description>
           </Card.Content>
           <Card.Content extra style={{ padding: '0.3em 1em 0.6em' }}>
-            <Meta>{this.state.genresToString}</Meta>
+            <Meta>{genresToString}</Meta>
           </Card.Content>
         </Card>
       </Container>

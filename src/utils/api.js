@@ -51,7 +51,6 @@ export const getImage = (image_path, size) =>
 export const convertGenres = async (genres, type) => {
   try {
     const genresURL = `https://api.themoviedb.org/3/genre/${type}/list?api_key=${API_KEY}&language=en-US`;
-    console.log('Requesting data from ', URL);
 
     const request = await axios(genresURL);
     const genresListFromAPI = await request.data.genres;
@@ -71,9 +70,13 @@ export const getPopular = async (type) => {
 
     const response = await axios(URL);
     const results = await response.data.results;
-    const resultsWithType = results.map(r => ({ ...r, type }));
 
-    return resultsWithType;
+    const resultsWithType = await results.map(async (r) => {
+      const genresToString = await convertGenres(r.genre_ids, type);
+      return ({ ...r, type, genresToString });
+    });
+
+    return Promise.all(resultsWithType);
   } catch (e) {
     console.error(e);
   }
