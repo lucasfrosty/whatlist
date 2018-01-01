@@ -1,6 +1,7 @@
 import React, { Fragment, Component } from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
+import styled from 'styled-components';
 import { Dimmer, Loader } from 'semantic-ui-react';
 
 // pres components
@@ -9,6 +10,12 @@ import Card from './Card';
 // data
 import { getPopular, TYPES } from '../utils/api';
 import { userLogin, userLogoff } from '../dataflow/actions';
+
+const CardContainer = styled.div`
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-evenly;
+`;
 
 
 class Home extends Component {
@@ -30,14 +37,16 @@ class Home extends Component {
     return (
       <Fragment>
         <h1>To watch list;</h1>
-        {popularMovies
-          ? popularMovies.map(movie => <Card key={movie.id} info={movie} />)
-          : (
-            <Dimmer active inverted>
-              <Loader>Loading...</Loader>
-            </Dimmer>
-          )
-        }
+        <CardContainer>
+          {popularMovies
+            ? popularMovies.map(movie => <Card key={movie.id} info={movie} />)
+            : (
+              <Dimmer active inverted>
+                <Loader>Loading...</Loader>
+              </Dimmer>
+            )
+          }
+        </CardContainer>
       </Fragment>
     );
   }

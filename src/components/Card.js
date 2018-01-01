@@ -41,8 +41,8 @@ class CardInfo extends Component {
     } = this.props.info;
     console.log(this.props.info);
     return (
-      <div>
-        <Card>
+      <div style={{ marginBottom: 30 }}>
+        <Card style={{ height: '100%' }}>
           <Image size="medium" fluid centered src={getImage(backdrop_path, 300)} />
           <Card.Content>
             <Card.Header>
@@ -57,15 +57,14 @@ class CardInfo extends Component {
                 {release_date && `Released in ${convertDate(release_date)}`}
               </Meta>
             </Card.Meta>
-            {/* <Card.Description>{overview}</Card.Description> */}
-            <Card.Description extra>
+            <Card.Description>
               <p>
                 {overview.length > 120
                   ? `${this.truncateWord(overview, 120)}...`
                   : overview
                 }
               </p>
-              <Button size="mini" content="Details" color="teal" />
+              {/* <Button size="mini" content="Details" color="teal" /> */}
             </Card.Description>
           </Card.Content>
           <Card.Content extra style={{ padding: '0.3em 1em 0.6em' }}>
