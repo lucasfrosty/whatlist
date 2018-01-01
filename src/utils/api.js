@@ -58,7 +58,7 @@ export const convertGenresArray = async (genresArray, type) => {
     const result = genresArray.map(genres => genres.map(genre =>
       genresListFromAPI.filter(genreFromAPI => genreFromAPI.id === genre).map(g => g.name)));
 
-    return result.join(', ');
+    return result;
   } catch (e) {
     console.error(e);
   }
@@ -73,10 +73,14 @@ export const getPopular = async (type) => {
     const results = await response.data.results;
     const resultGenresArrays = results.map(r => r.genre_ids);
     const genresToString = await convertGenresArray(resultGenresArrays, type);
-    const resultsWithType =
-      results.map((r, index) => ({ ...r, type, genresToString: genresToString[index] }));
 
-    return Promise.all(resultsWithType);
+    const resultsWithTypeAndGenres = results.map((r, index) => ({
+      ...r,
+      type,
+      genresToString: genresToString[index].join(', '),
+    }));
+
+    return Promise.all(resultsWithTypeAndGenres);
   } catch (e) {
     console.error(e);
   }
