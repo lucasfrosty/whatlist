@@ -33,7 +33,7 @@ class CardInfo extends Component {
 
   render() {
     const {
-      title, name, release_date, overview, vote_average, backdrop_path, genresToString
+      title, name, release_date, overview, vote_average, backdrop_path, genresToString,
     } = this.props.info;
     return (
       <Container hidden={this.props.hidden}>

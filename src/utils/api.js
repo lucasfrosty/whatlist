@@ -71,7 +71,7 @@ export const getPopular = async (type) => {
     const response = await axios(URL);
     const results = await response.data.results;
 
-    const resultsWithType = await results.map(async (r) => {
+    const resultsWithType = results.map(async (r) => {
       const genresToString = await convertGenres(r.genre_ids, type);
       return ({ ...r, type, genresToString });
     });
