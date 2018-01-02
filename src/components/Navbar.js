@@ -72,7 +72,7 @@ const Navbar = ({
         text: (
           <span>
             <Dropdown.Divider />
-            <Button onClick={logoutWithFacebook}>Logout</Button>
+            <Button fluid onClick={logoutWithFacebook}>Logout</Button>
           </span>
         ),
         onClick: () => logoutWithFacebook(),

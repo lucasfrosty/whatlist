@@ -1,8 +1,8 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
-import styled from 'styled-components';
-import { Dimmer, Loader, Tab } from 'semantic-ui-react';
+import styled, { injectGlobal } from 'styled-components';
+import { Tab, Container, Button } from 'semantic-ui-react';
 
 // pres components
 import Card from './Card';
@@ -10,6 +10,13 @@ import Card from './Card';
 // data
 import { getPopular, TYPES } from '../utils/api';
 import { userLogin, userLogoff } from '../dataflow/actions';
+
+/* eslint-disable no-unused-expressions */
+injectGlobal`
+  #root {
+    background-color: #E9EAEE;
+  }
+`;
 
 const CardContainer = styled.div`
   display: flex;
@@ -34,19 +41,15 @@ class Home extends Component {
     const displayCards = contentArray =>
       contentArray.map((movie, index) => <Card hidden={index >= 10} key={movie.id} info={movie} />);
 
-    if (content === undefined) {
-      return (
-        <Dimmer active>
-          <Loader>Loading...</Loader>
-        </Dimmer>
-      );
-    }
+    const shouldLoad = (content === undefined);
 
     return (
-      <Tab.Pane>
-        <CardContainer>
-          {displayCards(content)}
-        </CardContainer>
+      <Tab.Pane loading={shouldLoad}>
+        {shouldLoad || (
+          <CardContainer>
+            {displayCards(content)}
+          </CardContainer>
+        )}
       </Tab.Pane>
     );
   }
@@ -54,11 +57,19 @@ class Home extends Component {
   render() {
     const { popularMovies, popularTV } = this.state;
     const panes = [
-      { menuItem: 'Movies', render: () => this.renderTabPane(popularMovies) },
-      { menuItem: 'TV', render: () => this.renderTabPane(popularTV) },
+      { menuItem: <Button inverted compact size="small" color="blue">Popular TV Series</Button>, render: () => this.renderTabPane(popularTV) },
+      { menuItem: <Button inverted compact size="small" color="blue">Popular Movies</Button>, render: () => this.renderTabPane(popularMovies) },
     ];
 
-    return <Tab panes={panes} />;
+    return (
+      <Container>
+        <Tab
+          menu={{ attached: false, secondary: true, widths: 2 }}
+          style={{ paddingTop: 80 }}
+          panes={panes}
+        />
+      </Container>
+    );
   }
 }
 
