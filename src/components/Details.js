@@ -1,7 +1,63 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import { Container, Dimmer, Loader, Image, Icon } from 'semantic-ui-react';
+import styled from 'styled-components';
 
-import { getAPIData } from '../utils/api';
+import { getAPIData, getImage } from '../utils/api';
+import convertDate from '../utils/convertDate';
+
+const containerStyles = {
+  backgroundColor: '#fff',
+  border: '1px solid #d4d4d5',
+  paddingTop: 80,
+};
+
+const Title = styled.h1`
+  font-size: 35px;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  margin-bottom: 0;
+
+  @media (max-width: 768px) {
+    text-align: center;
+    margin-top: 15px !important;
+  }
+`;
+
+const ReleaseDate = styled.h2`
+  color: #ccc;
+  font-size: 15px;
+  font-style: italic;
+  font-weight: 400;
+  margin-top: 0;
+`;
+
+const InfoFlexContainer = styled.div`
+  display: flex;
+  margin: 20px 80px;
+
+  @media (max-width: 768px) {
+    flex-direction: column;
+  }
+`;
+
+const InfoFlexItem = styled.div`
+  margin: 10px 20px;
+`;
+
+const Overview = styled.p`
+  font-style: italic;
+  font-size: 17px;
+  margin-top: 20px;
+  color: #1b435d;
+`;
+
+const Rating = styled.span`
+  font-size: 14px;
+  .icon {
+    margin-right: 0;
+  }
+`;
 
 class Details extends React.Component {
   static propTypes = {
@@ -11,29 +67,68 @@ class Details extends React.Component {
         id: PropTypes.string,
       }),
     }).isRequired,
-  }
+  };
 
   state = {
     info: undefined,
-  }
+  };
 
   componentDidMount() {
-    const { id, type } = this.props.match.params; 
-    getAPIData(id, type, id)
-      .then(res => this.setState({ info: res }));
+    const { id, type } = this.props.match.params;
+    getAPIData(id, type, 'id').then((res) => {
+      console.log(res);
+      this.setState({ info: res });
+    });
   }
+
+  componentToDisplay = () => {
+    if (this.state.info) {
+      const {
+        name,
+        title,
+        poster_path,
+        overview,
+        genres,
+        release_date,
+        vote_average,
+      } = this.state.info;
+
+      const genresName = genres.map(genre => genre.name).join(', ');
+      return (
+        <Container style={containerStyles}>
+          <InfoFlexContainer>
+            <Image fluid={false} centered bordered src={getImage(poster_path, 300)} />
+            <InfoFlexItem>
+              <Title>{name || title}</Title>
+              {release_date && (
+                <ReleaseDate>
+                  {release_date && `Released in ${convertDate(release_date)}`}
+                </ReleaseDate>
+              )}
+              <Overview>{overview}</Overview>
+
+
+              <Rating>
+                <Icon color="yellow" name="star" />
+                {vote_average}
+              </Rating>
+              <p>{genresName}</p>
+            </InfoFlexItem>
+          </InfoFlexContainer>
+        </Container>
+      );
+    }
+
+    return (
+      <Dimmer active>
+        <Loader>Loading...</Loader>
+      </Dimmer>
+    );
+  };
 
   render() {
-    return (
-      <code>
-        <pre>
-          {JSON.stringify(this.state.info, null, 3)}
-        </pre>
-      </code>
-    );
+    return this.componentToDisplay();
   }
 }
-
-
 
 export default Details;

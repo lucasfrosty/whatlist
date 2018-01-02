@@ -15,9 +15,8 @@ export const TYPES = {
  */
 export const getAPIData = async (query, type, selector) => {
   try {
-    const queryURL =
-      `https://api.themoviedb.org/3/search/${type}?api_key=${API_KEY}&query=${query}&page=1`;
-    const idURL = `https://api.themoviedb.org/3/${type}/${query}?&api_key=${API_KEY}`;
+    const queryURL = `https://api.themoviedb.org/3/search/${type}?api_key=${API_KEY}&query=${query}&page=1`;
+    const idURL = `https://api.themoviedb.org/3/${type}/${query}?&api_key=${API_KEY}&append_to_response=videos`;
     const URL = (selector === 'query' ? queryURL : idURL);
 
     const response = await axios(URL);
