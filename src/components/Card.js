@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import styled from 'styled-components';
 import PropTypes from 'prop-types';
+import { Link } from 'react-router-dom';
 import { Card, Icon, Image } from 'semantic-ui-react';
 
 import convertDate from '../utils/convertDate';
@@ -33,12 +34,14 @@ class CardInfo extends Component {
 
   render() {
     const {
-      title, name, release_date, overview, vote_average, backdrop_path, genresToString,
+      title, name, release_date, overview, vote_average, backdrop_path, genresToString, type, id
     } = this.props.info;
     return (
       <Container hidden={this.props.hidden}>
         <Card style={{ height: '100%' }}>
-          <Image fluid centered src={getImage(backdrop_path, 300)} />
+          <Link to={`/details/${type}/${id}`}>
+            <Image fluid centered src={getImage(backdrop_path, 300)} />
+          </Link>
           <Card.Content>
             <Card.Header>
               {title || name}

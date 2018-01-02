@@ -1,4 +1,4 @@
-import React, { Fragment, Component } from 'react';
+import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
@@ -15,7 +15,7 @@ const CardContainer = styled.div`
   display: flex;
   flex-wrap: wrap;
   justify-content: center;
-  width: 95%;
+  /* width: 95%; */
   margin: auto;
 `;
 
@@ -37,7 +37,7 @@ class Home extends Component {
 
     if (content === undefined) {
       return (
-        <Dimmer active inverted>
+        <Dimmer active>
           <Loader>Loading...</Loader>
         </Dimmer>
       );
@@ -59,12 +59,7 @@ class Home extends Component {
       { menuItem: 'TV', render: () => this.renderTabPane(popularTV) },
     ];
 
-    return (
-      <Fragment>
-        <h1>To watch list;</h1>
-        <Tab panes={panes} />
-      </Fragment>
-    );
+    return <Tab panes={panes} />;
   }
 }
 
