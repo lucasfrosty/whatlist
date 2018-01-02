@@ -1,11 +1,10 @@
 import React, { Fragment, Component } from 'react';
 import { BrowserRouter, Route, Switch } from 'react-router-dom';
 
-import ProtectedRoute from './ProtectedRoute';
+// import ProtectedRoute from './ProtectedRoute';
 import Home from './Home';
 import Navbar from './Navbar';
-
-const Teste = () => <h1>Teste</h1>;
+import Details from './Details';
 
 class App extends Component {
   render() {
@@ -15,7 +14,7 @@ class App extends Component {
           <Navbar />
           <Switch>
             <Route exact path="/" component={Home} />
-            <ProtectedRoute path="/teste" component={Teste} />
+            <Route path="/details/:type/:id" component={Details} />
           </Switch>
         </Fragment>
       </BrowserRouter>

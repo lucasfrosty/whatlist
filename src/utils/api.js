@@ -13,19 +13,19 @@ export const TYPES = {
  * @param {string: 'movie' or 'tv'} type - Defining if it is a Movie or a TV Show
  * @returns {string} - The API URL for the query passed by
  */
-export const getApiURL = async (query, type) => {
-  if (type === 'tv' || type === 'movie') {
-    try {
-      const URL =
-        `https://api.themoviedb.org/3/search/${type}?api_key=${API_KEY}&language=en-US&query=${query}&page=1`;
+export const getAPIData = async (query, type, selector) => {
+  try {
+    const queryURL =
+      `https://api.themoviedb.org/3/search/${type}?api_key=${API_KEY}&query=${query}&page=1`;
+    const idURL = `https://api.themoviedb.org/3/${type}/${query}?&api_key=${API_KEY}`;
+    const URL = (selector === 'query' ? queryURL : idURL);
 
-      const response = await axios(URL);
-      const results = await response.data.results;
+    const response = await axios(URL);
+    const results = response.data.results || response.data;
 
-      return results;
-    } catch (e) {
-      console.error(e);
-    }
+    return results;
+  } catch (e) {
+    console.error(e);
   }
 
   return null;
