@@ -4,7 +4,6 @@ import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
 import { Card, Icon, Image } from 'semantic-ui-react';
 
-import convertDate from '../utils/convertDate';
 import { getImage } from '../utils/api';
 
 const Container = styled.div`
@@ -34,7 +33,7 @@ class CardInfo extends Component {
 
   render() {
     const {
-      title, name, release_date, overview, vote_average, backdrop_path, genresToString, type, id,
+      title, name, overview, vote_average, backdrop_path, genresToString, type, id,
     } = this.props.info;
     return (
       <Container hidden={this.props.hidden}>
@@ -50,11 +49,6 @@ class CardInfo extends Component {
                 {vote_average}
               </Rating>
             </Card.Header>
-            <Card.Meta>
-              <Meta>
-                {release_date && `Released in ${convertDate(release_date)}`}
-              </Meta>
-            </Card.Meta>
             <Card.Description>
               <p>
                 {overview.length > 120
