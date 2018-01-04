@@ -55,11 +55,11 @@ class Home extends Component {
     const { popularMovies, popularTV } = this.state;
     const panes = [
       {
-        menuItem: <Button inverted compact size="small" color="blue">Popular Movies</Button>,
+        menuItem: <Button inverted compact size="large" color="blue">Popular Movies</Button>,
         render: () => this.renderTabPane(popularMovies),
       },
       {
-        menuItem: <Button inverted compact size="small" color="blue">Popular TV Shows</Button>,
+        menuItem: <Button inverted compact size="large" color="blue">Popular TV Shows</Button>,
         render: () => this.renderTabPane(popularTV),
       },
     ];

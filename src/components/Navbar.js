@@ -2,11 +2,20 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
 import PropTypes from 'prop-types';
-import { Container, Image, Menu, Button, Icon, Dropdown } from 'semantic-ui-react';
+import {
+  Container,
+  Image,
+  Menu,
+  Button,
+  Dropdown,
+  Modal,
+  Form,
+  Divider,
+} from 'semantic-ui-react';
 
 import { userLogin, userLogoff } from '../dataflow/actions';
 import Popcorn from '../assets/popcorn.svg';
-import firebase, { facebookProvider } from '../utils/firebase';
+import firebase, { facebookProvider, googleProvider } from '../utils/firebase';
 
 const leftMenuItemStyle = { marginLeft: 'auto', borderLeft: '1px solid rgba(34,36,38,.1)' };
 const borderLeft = { borderLeft: '1px solid rgba(34,36,38,.1)' };
@@ -15,40 +24,84 @@ const Navbar = ({
   auth, user, onUserLogin, onUserLogoff,
 }) => {
   const loginWithFacebook = () => {
-    firebase.auth().signInWithPopup(facebookProvider).then((result) => {
-      const {
-        name, email, photoURL, displayName,
-      } = result.user;
+    firebase
+      .auth()
+      .signInWithPopup(facebookProvider)
+      .then((result) => {
+        const {
+          name, email, photoURL, displayName,
+        } = result.user;
 
-      onUserLogin({
-        auth: true,
-        user: {
-          name,
-          email,
-          displayName,
-          photoURL,
-        },
+        onUserLogin({
+          auth: true,
+          user: {
+            name,
+            email,
+            displayName,
+            photoURL,
+          },
+        });
+      })
+      .catch((err) => {
+        console.log(err);
       });
-    }).catch((err) => {
-      console.log(err);
-    });
   };
 
-  const logoutWithFacebook = () => {
-    firebase.auth().signOut().then(() => {
-      onUserLogoff();
-    }).catch((err) => {
-      console.error(err);
-    });
+  const loginWithGoogle = () => {
+    firebase
+      .auth()
+      .signInWithPopup(googleProvider)
+      .then((result) => {
+        console.log(result);
+      })
+      .catch((err) => {
+        console.error(err);
+      });
+  };
+
+  const logout = () => {
+    firebase
+      .auth()
+      .signOut()
+      .then(() => {
+        onUserLogoff();
+      })
+      .catch((err) => {
+        console.error(err);
+      });
   };
 
   const menuItemsToRender = (isAuth) => {
     if (!isAuth) {
       return (
         <Menu.Item style={leftMenuItemStyle}>
-          <Button color="facebook" onClick={loginWithFacebook}>
-            <Icon name="facebook" /> Login with Facebook
-          </Button>
+          <Modal size="mini" trigger={<Button>Login</Button>}>
+            <Modal.Content>
+              <div style={{ marginBottom: 20, textAlign: 'center' }}>
+                <Image src={Popcorn} style={{ margin: 'auto', width: 45 }} />
+                <p style={{ fontSize: 35, marginTop: 3, fontFamily: 'Inconsolata' }}>watchlist</p>
+              </div>
+              <Form size="large">
+                <Form.Input fluid icon="user" iconPosition="left" placeholder="E-mail address" />
+                <Form.Input
+                  fluid
+                  icon="lock"
+                  iconPosition="left"
+                  placeholder="Password"
+                  type="password"
+                />
+                <Button color="blue" fluid disabled size="large">
+                  Login
+                </Button>
+              </Form>
+              <Divider horizontal>Or you can login with:</Divider>
+              <div style={{ textAlign: 'center' }}>
+                <Button circular color="facebook" icon="facebook" onClick={loginWithFacebook} />
+                <Button circular color="google plus" icon="google" onClick={loginWithGoogle} />
+                <Button circular color="twitter" icon="twitter" disabled />
+              </div>
+            </Modal.Content>
+          </Modal>
         </Menu.Item>
       );
     }
@@ -62,7 +115,11 @@ const Navbar = ({
     const options = [
       {
         key: 'user-info',
-        text: <span>Signed in as <strong>{user.displayName}</strong></span>,
+        text: (
+          <span>
+            Signed in as <strong>{user.displayName}</strong>
+          </span>
+        ),
         disabled: true,
       },
       { key: 'user', text: 'Account', icon: 'user' },
@@ -72,10 +129,11 @@ const Navbar = ({
         text: (
           <span>
             <Dropdown.Divider />
-            <Button fluid onClick={logoutWithFacebook}>Logout</Button>
+            <Button fluid onClick={logout}>
+              Logout
+            </Button>
           </span>
         ),
-        onClick: () => logoutWithFacebook(),
       },
     ];
 
@@ -93,8 +151,8 @@ const Navbar = ({
       <Container>
         <Link to="/">
           <Menu.Item as="a" style={borderLeft} header>
-            <Image size="mini" src={Popcorn} width="22" style={{ marginRight: '.3em' }} />
-            watchlist
+            <Image src={Popcorn} width="27" style={{ marginRight: '.3em' }} />
+            <span style={{ fontFamily: 'Inconsolata', fontWeight: 400, fontSize: 20 }}>watchlist</span>
           </Menu.Item>
         </Link>
         {menuItemsToRender(auth)}
