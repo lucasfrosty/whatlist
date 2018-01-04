@@ -75,7 +75,7 @@ const Navbar = ({
     if (!isAuth) {
       return (
         <Menu.Item style={leftMenuItemStyle}>
-          <Modal size="mini" trigger={<Button>Login</Button>}>
+          <Modal size="mini" trigger={<Button color="blue">Login</Button>}>
             <Modal.Content>
               <div style={{ marginBottom: 20, textAlign: 'center' }}>
                 <Image src={Popcorn} style={{ margin: 'auto', width: 45 }} />

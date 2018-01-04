@@ -13,7 +13,7 @@ const containerStyles = {
 };
 
 const Title = styled.h1`
-  font-size: 35px;
+  font-size: ${props => props.size || '35'}px;
   letter-spacing: 1px;
   text-transform: uppercase;
   margin-bottom: 0;
@@ -25,16 +25,16 @@ const Title = styled.h1`
 `;
 
 const ReleaseDate = styled.h2`
-  color: #ccc;
+  color: #808F85;
   font-size: 15px;
-  font-style: italic;
   font-weight: 400;
   margin-top: 0;
+  font-family: 'Inconsolata';
 `;
 
 const InfoFlexContainer = styled.div`
   display: flex;
-  margin: 20px 80px;
+  margin: 20px 10%;
 
   @media (max-width: 768px) {
     flex-direction: column;
@@ -46,10 +46,10 @@ const InfoFlexItem = styled.div`
 `;
 
 const Overview = styled.p`
-  font-style: italic;
   font-size: 17px;
   margin-top: 20px;
-  color: #1b435d;
+  color: #777DA7;
+  font-family: 'Inconsolata';
 `;
 
 const Rating = styled.span`
@@ -104,14 +104,15 @@ class Details extends React.Component {
                 <ReleaseDate>
                   {release_date && `Released in ${convertDate(release_date)}`}
                 </ReleaseDate>
-              )}
+              )}                                            
               <Overview>{overview}</Overview>
 
+              <Title size="20">Ratings</Title>
+                <Rating>
+                  <Icon color="yellow" name="star" />
+                  {vote_average}
+                </Rating>
 
-              <Rating>
-                <Icon color="yellow" name="star" />
-                {vote_average}
-              </Rating>
               <p>{genresName}</p>
             </InfoFlexItem>
           </InfoFlexContainer>
