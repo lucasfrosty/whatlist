@@ -88,7 +88,7 @@ const AditionalWrappedContainer = styled.div`
   flex-basis: 50%;
 `;
 
-const Genres = styled.p`
+const Genres = styled.span`
   font-family: 'Inconsolata';
   font-size: 15px;
   color: #808f85;
@@ -157,7 +157,9 @@ class Details extends React.Component {
                   <Subtitle>Ratings</Subtitle>
                   <Rating>
                     <Icon color="yellow" name="star" />
-                    {vote_average}
+                    <Genres>
+                      {vote_average}
+                    </Genres>
                   </Rating>
                 </AditionalWrappedContainer>
 
