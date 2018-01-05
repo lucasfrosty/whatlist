@@ -4,7 +4,7 @@ import { BrowserRouter, Route, Switch } from 'react-router-dom';
 // import ProtectedRoute from './ProtectedRoute';
 import Home from './Home';
 import Navbar from './Navbar';
-import Details from './Details';
+import Details from './Details/Details';
 
 class App extends Component {
   render() {

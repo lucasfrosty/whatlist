@@ -17,7 +17,7 @@ import { userLogin, userLogoff } from '../dataflow/actions';
 import Popcorn from '../assets/popcorn.svg';
 import firebase, { facebookProvider, googleProvider } from '../utils/firebase';
 
-const leftMenuItemStyle = { marginLeft: 'auto', borderLeft: '1px solid rgba(34,36,38,.1)' };
+const leftMenuItemStyle = { marginLeft: 'auto', borderRight: '1px solid rgba(34,36,38,.1)', borderLeft: 'none' };
 const borderLeft = { borderLeft: '1px solid rgba(34,36,38,.1)' };
 
 const Navbar = ({
@@ -79,7 +79,7 @@ const Navbar = ({
             <Modal.Content>
               <div style={{ marginBottom: 20, textAlign: 'center' }}>
                 <Image src={Popcorn} style={{ margin: 'auto', width: 45 }} />
-                <p style={{ fontSize: 35, marginTop: 3, fontFamily: 'Inconsolata' }}>watchlist</p>
+                <p style={{ fontSize: 35, marginTop: 3, fontFamily: 'Inconsolata' }}><strong>what</strong>list</p>
               </div>
               <Form size="large">
                 <Form.Input fluid icon="user" iconPosition="left" placeholder="E-mail address" />
@@ -138,11 +138,9 @@ const Navbar = ({
     ];
 
     return (
-      <Menu.Menu position="right">
-        <Menu.Item>
-          <Dropdown trigger={trigger} options={options} pointing="top left" icon={null} />
-        </Menu.Item>
-      </Menu.Menu>
+      <Menu.Item style={leftMenuItemStyle}>
+        <Dropdown trigger={trigger} options={options} pointing="top right" icon={null} />
+      </Menu.Item>
     );
   };
 
@@ -150,9 +148,9 @@ const Navbar = ({
     <Menu fixed="top">
       <Container>
         <Link to="/">
-          <Menu.Item as="a" style={borderLeft} header>
+          <Menu.Item as="span" style={borderLeft} header>
             <Image src={Popcorn} width="27" style={{ marginRight: '.3em' }} />
-            <span style={{ fontFamily: 'Inconsolata', fontWeight: 400, fontSize: 20 }}>watchlist</span>
+            <span style={{ fontFamily: 'Inconsolata', fontWeight: 400, fontSize: 20 }}><strong>what</strong>list</span>
           </Menu.Item>
         </Link>
         {menuItemsToRender(auth)}

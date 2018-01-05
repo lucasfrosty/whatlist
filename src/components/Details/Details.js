@@ -3,8 +3,11 @@ import PropTypes from 'prop-types';
 import { Container, Dimmer, Loader, Image, Icon, Divider } from 'semantic-ui-react';
 import styled from 'styled-components';
 
-import { getAPIData, getImage } from '../utils/api';
-import { convertDate, convertMoney } from '../utils/conversor';
+// components
+import DetailsTrailer from './DetailsTrailer';
+
+import { getAPIData, getImage } from '../../utils/api';
+import { convertDate, convertMoney } from '../../utils/conversor';
 
 const containerStyles = {
   backgroundColor: '#fff',
@@ -38,7 +41,7 @@ const ReleaseDate = styled.h2`
   margin-top: 0;
   font-family: 'Inconsolata';
 
-  @media (max-width: 768px) {
+  @media (max-width: 992px) {
     text-align: center;
   }
 `;
@@ -130,6 +133,7 @@ class Details extends React.Component {
         release_date,
         vote_average,
         runtime,
+        videos,
         revenue,
         first_air_date,
       } = this.state.info;
@@ -138,14 +142,14 @@ class Details extends React.Component {
       return (
         <Container style={containerStyles}>
           <InfoFlexContainer>
-            <Image fluid={false} centered bordered src={getImage(poster_path, 300)} />
+            <Image style={{ maxWidth: 300, maxHeight: 450 }} centered bordered src={getImage(poster_path, 300)} />
             <InfoFlexItem>
               <Title>{name || title}</Title>
               {(release_date || first_air_date) && (
                 <ReleaseDate>
-                  {type === 'tv'
-                    ? release_date && `Released in ${convertDate(release_date)}`
-                    : first_air_date && `First release in ${convertDate(first_air_date)}`}
+                  {release_date
+                    ? `Released in ${convertDate(release_date)}`
+                    : `First release in ${convertDate(first_air_date)}`}
                 </ReleaseDate>
               )}
               <Overview>{overview}</Overview>
@@ -192,6 +196,7 @@ class Details extends React.Component {
               </AditionalContainer>
             </InfoFlexItem>
           </InfoFlexContainer>
+          {videos.results.length > 0 ? <DetailsTrailer videos={videos} /> : null}
         </Container>
       );
     }
