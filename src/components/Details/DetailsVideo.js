@@ -3,7 +3,7 @@ import { Divider, Embed } from 'semantic-ui-react';
 import styled from 'styled-components';
 import PropTypes from 'prop-types';
 
-const Container = styled.div`
+const VideoContainer = styled.div`
   display: flex;
   margin: 20px 10%;
   flex-direction: column;
@@ -22,8 +22,8 @@ const embedItemStyle = {
   padding: 0,
 };
 
-const DetailsTrailer = ({ videos }) => (
-  <Container>
+const DetailsVideo = ({ videos }) => (
+  <VideoContainer>
     <Divider horizontal><span style={{ fontSize: 30 }}>Videos</span></Divider>
     <EmbedContainer>
       {videos.results.map(video => (
@@ -42,11 +42,11 @@ const DetailsTrailer = ({ videos }) => (
         />
       ))}
     </EmbedContainer>
-  </Container>
+  </VideoContainer>
 );
 
-DetailsTrailer.propTypes = {
+DetailsVideo.propTypes = {
   videos: PropTypes.objectOf(PropTypes.any).isRequired,
 };
 
-export default DetailsTrailer;
+export default DetailsVideo;
