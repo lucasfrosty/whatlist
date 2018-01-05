@@ -1,3 +1,6 @@
+// NOT USING THIS FOR NOW
+// JUST KEEPING FOR REMIND PORPURSES
+
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Redirect, withRouter } from 'react-router-dom';
