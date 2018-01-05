@@ -1,5 +1,5 @@
 {
-  "name": "to-watch-list",
+  "name": "whatlist",
   "version": "0.1.0",
   "private": true,
   "dependencies": {
@@ -16,11 +16,13 @@
     "redux": "^3.7.2",
     "redux-saga": "^0.16.0",
     "semantic-ui-react": "^0.77.1",
+    "serve": "^6.4.3",
     "styled-components": "^2.4.0",
     "uuid": "^3.1.0"
   },
   "scripts": {
     "start": "react-scripts start",
+    "now-start": "serve -s build",
     "build": "react-scripts build",
     "test": "react-scripts test --env=jsdom",
     "eject": "react-scripts eject"
