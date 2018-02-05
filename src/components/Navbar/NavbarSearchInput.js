@@ -4,13 +4,12 @@ import { Input, Dropdown } from 'semantic-ui-react';
 import styled from 'styled-components';
 
 const Form = styled.form`
-  
   .ui.action.left.icon.input.parent-input-div > input {
     width: 150px;
   }
 `;
 
-const NavbarSearchInput = ({ fetchData }) => {
+const NavbarSearchInput = ({ fetchData, isFetchingData }) => {
   let input;
   let dropdown;
 
@@ -34,9 +33,8 @@ const NavbarSearchInput = ({ fetchData }) => {
     <Form onSubmit={handleSubmit}>
       <Input
         className="parent-input-div"
-        // loading={isFetchingData}
-        // icon={!isFetchingData ? 'search' : ''}
-        icon="search"
+        loading={isFetchingData}
+        icon={!isFetchingData ? 'search' : ''}
         iconPosition="left"
         placeholder="Search for..."
         ref={(ref) => {
@@ -63,6 +61,7 @@ const NavbarSearchInput = ({ fetchData }) => {
 
 NavbarSearchInput.propTypes = {
   fetchData: PropTypes.func.isRequired,
+  isFetchingData: PropTypes.bool.isRequired,
 };
 
 export default NavbarSearchInput;

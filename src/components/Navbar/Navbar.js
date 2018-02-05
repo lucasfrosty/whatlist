@@ -3,6 +3,7 @@ import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import { Container, Menu } from 'semantic-ui-react';
 
+import ContentInfoModal from '../ContentInfoModal';
 import NavbarBrand from './NavbarBrand';
 import NavbarLoginModal from './NavbarLoginModal';
 import NavbarUserInfo from './NavbarUserInfo';
@@ -19,10 +20,26 @@ const searchItemStyle = {
   paddingBottom: 5,
 };
 
-const Navbar = ({
-  auth, user, onUserLogin, onUserLogoff,
-}) => {
-  const loginWithFacebook = () => {
+class Navbar extends React.Component {
+  static propTypes = {
+    user: PropTypes.objectOf(PropTypes.any).isRequired,
+    auth: PropTypes.bool.isRequired,
+    onUserLogin: PropTypes.func.isRequired,
+    onUserLogoff: PropTypes.func.isRequired,
+  };
+
+  state = {
+    searchInfo: undefined,
+    isFetchingData: false,
+  };
+
+  clearSearchInfo = () => {
+    this.setState({
+      searchInfo: undefined,
+    });
+  };
+
+  loginWithFacebook = () => {
     firebase
       .auth()
       .signInWithPopup(facebookProvider)
@@ -31,7 +48,7 @@ const Navbar = ({
           name, email, photoURL, displayName,
         } = result.user;
 
-        onUserLogin({
+        this.props.onUserLogin({
           auth: true,
           user: {
             name,
@@ -46,7 +63,7 @@ const Navbar = ({
       });
   };
 
-  const loginWithGoogle = () => {
+  loginWithGoogle = () => {
     firebase
       .auth()
       .signInWithPopup(googleProvider)
@@ -58,52 +75,53 @@ const Navbar = ({
       });
   };
 
-  const logout = () => {
+  logout = () => {
     firebase
       .auth()
       .signOut()
       .then(() => {
-        onUserLogoff();
+        this.props.onUserLogoff();
       })
       .catch((err) => {
         console.error(err);
       });
   };
 
-  const fetchData = (inputValue, type) => {
-    // fetch the data
-    console.log('value', inputValue);
-    console.log('type', type);
+  fetchData = (inputValue, type) => {
+    this.setState({
+      searchInfo: inputValue,
+    });
   };
 
-  return (
-    <Menu fixed="top">
-      <Container>
-        <NavbarBrand />
-        <Menu.Item style={searchItemStyle}>
-          <NavbarSearchInput fetchData={fetchData} />
-        </Menu.Item>
-        <Menu.Item>
-          {auth ? (
-            <NavbarUserInfo user={user} logout={logout} />
-          ) : (
-            <NavbarLoginModal
-              loginWithFacebook={loginWithFacebook}
-              loginWithGoogle={loginWithGoogle}
-            />
-          )}
-        </Menu.Item>
-      </Container>
-    </Menu>
-  );
-};
+  render() {
+    const { user, auth } = this.props;
+    const { isFetchingData, searchInfo } = this.state;
+    return (
+      <Menu fixed="top">
+        <Container>
+          <NavbarBrand />
+          <Menu.Item style={searchItemStyle}>
+            <NavbarSearchInput fetchData={this.fetchData} isFetchingData={isFetchingData} />
+          </Menu.Item>
+          <Menu.Item>
+            {auth ? (
+              <NavbarUserInfo user={user} logout={this.logout} />
+            ) : (
+              <NavbarLoginModal
+                loginWithFacebook={this.loginWithFacebook}
+                loginWithGoogle={this.loginWithGoogle}
+              />
+            )}
+          </Menu.Item>
 
-Navbar.propTypes = {
-  user: PropTypes.objectOf(PropTypes.any).isRequired,
-  auth: PropTypes.bool.isRequired,
-  onUserLogin: PropTypes.func.isRequired,
-  onUserLogoff: PropTypes.func.isRequired,
-};
+          {searchInfo !== undefined && (
+            <ContentInfoModal info={searchInfo} clearSearchInfo={this.clearSearchInfo} />
+          )}
+        </Container>
+      </Menu>
+    );
+  }
+}
 
 const mapStateToProps = state => ({
   auth: state.auth,
