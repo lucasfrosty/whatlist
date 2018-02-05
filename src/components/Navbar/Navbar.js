@@ -6,14 +6,17 @@ import { Container, Menu } from 'semantic-ui-react';
 import NavbarBrand from './NavbarBrand';
 import NavbarLoginModal from './NavbarLoginModal';
 import NavbarUserInfo from './NavbarUserInfo';
+import NavbarSearchInput from './NavbarSearchInput';
 
 import { userLogin, userLogoff } from '../../dataflow/actions';
 import firebase, { facebookProvider, googleProvider } from '../../utils/firebase';
 
-const leftMenuItemStyle = {
+const searchItemStyle = {
   marginLeft: 'auto',
   borderRight: '1px solid rgba(34,36,38,.1)',
   borderLeft: 'none',
+  paddingTop: 5,
+  paddingBottom: 5,
 };
 
 const Navbar = ({
@@ -67,11 +70,20 @@ const Navbar = ({
       });
   };
 
+  const fetchData = (inputValue, type) => {
+    // fetch the data
+    console.log('value', inputValue);
+    console.log('type', type);
+  };
+
   return (
     <Menu fixed="top">
       <Container>
         <NavbarBrand />
-        <Menu.Item style={leftMenuItemStyle}>
+        <Menu.Item style={searchItemStyle}>
+          <NavbarSearchInput fetchData={fetchData} />
+        </Menu.Item>
+        <Menu.Item>
           {auth ? (
             <NavbarUserInfo user={user} logout={logout} />
           ) : (

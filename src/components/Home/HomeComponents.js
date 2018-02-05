@@ -16,7 +16,7 @@ const HomeComponent = ({ popularMoviesInfo, popularTVInfo }) => {
   const renderTabPane = (content) => {
     const displayCards = contentArray =>
       contentArray.map((movie, index) => <Card hidden={index >= 10} key={movie.id} info={movie} />);
-    const shouldDisplayContent = content === undefined;
+    const shouldDisplayContent = (content === undefined);
 
     return (
       <Tab.Pane loading={shouldDisplayContent}>

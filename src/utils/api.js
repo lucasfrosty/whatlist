@@ -84,4 +84,3 @@ export const getPopular = async (type) => {
     console.error(e);
   }
 };
-
