@@ -29,11 +29,24 @@ class Details extends React.Component {
   };
 
   componentDidMount() {
+    console.log('fui renderizado');
     const { id, type } = this.props.match.params;
     getAPIData(id, type, 'id').then((res) => {
-      console.log(res);
+      console.log('fui renderizado', res);
       this.setState({ info: res });
     });
+  }
+
+  componentDidUpdate(prevProps) {
+    console.log('UPDATEE!!');
+    const { id, type } = this.props.match.params;
+
+    if (id !== prevProps.match.params.id && type !== prevProps.match.params.id) {
+      console.log('MUDOU A ROTA!!');
+      getAPIData(id, type, 'id').then((res) => {
+        this.setState({ info: res });
+      });
+    }
   }
 
   render() {

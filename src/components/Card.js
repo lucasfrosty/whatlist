@@ -26,20 +26,28 @@ const Meta = styled.span`
 class CardInfo extends Component {
   truncateWord = (str, len) => {
     let trimmedString = str.substr(0, len);
-    trimmedString = trimmedString.substr(0, Math.min(trimmedString.length, trimmedString.lastIndexOf(' ')));
+    trimmedString = trimmedString.substr(
+      0,
+      Math.min(trimmedString.length, trimmedString.lastIndexOf(' ')),
+    );
 
     return trimmedString;
-  }
+  };
 
   render() {
     const {
-      title, name, overview, vote_average, backdrop_path, genresToString, type, id,
+      title, name, vote_average, poster_path, genresToString, type, id,
     } = this.props.info;
     return (
       <Container hidden={this.props.hidden}>
         <Card style={{ height: '100%' }}>
           <Link to={`/details/${type}/${id}`}>
-            <Image fluid centered src={getImage(backdrop_path, 300)} />
+            <Image
+              onClick={this.props.clearSearchInfo || null}
+              size="medium"
+              centered
+              src={getImage(poster_path, 300)}
+            />
           </Link>
           <Card.Content>
             <Card.Header>
@@ -49,14 +57,6 @@ class CardInfo extends Component {
                 {vote_average}
               </Rating>
             </Card.Header>
-            <Card.Description>
-              <p>
-                {overview.length > 120
-                  ? `${this.truncateWord(overview, 120)}...`
-                  : overview
-                }
-              </p>
-            </Card.Description>
           </Card.Content>
           <Card.Content extra style={{ padding: '0.3em 1em 0.6em' }}>
             <Meta>{genresToString}</Meta>
@@ -69,10 +69,12 @@ class CardInfo extends Component {
 
 CardInfo.defaultProps = {
   hidden: false,
+  clearSearchInfo: undefined,
 };
 
 CardInfo.propTypes = {
   info: PropTypes.objectOf(PropTypes.any).isRequired,
+  clearSearchInfo: PropTypes.func,
   hidden: PropTypes.bool,
 };
 

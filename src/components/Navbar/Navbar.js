@@ -9,6 +9,7 @@ import NavbarLoginModal from './NavbarLoginModal';
 import NavbarUserInfo from './NavbarUserInfo';
 import NavbarSearchInput from './NavbarSearchInput';
 
+import { getAPIData } from '../../utils/api';
 import { userLogin, userLogoff } from '../../dataflow/actions';
 import firebase, { facebookProvider, googleProvider } from '../../utils/firebase';
 
@@ -88,9 +89,16 @@ class Navbar extends React.Component {
   };
 
   fetchData = (inputValue, type) => {
-    this.setState({
-      searchInfo: inputValue,
-    });
+    getAPIData(inputValue, type, 'query')
+      .then(arrayResponse => arrayResponse[0])
+      .then((response) => {
+        this.setState({
+          searchInfo: {
+            ...response,
+            type,
+          },
+        });
+      });
   };
 
   render() {
