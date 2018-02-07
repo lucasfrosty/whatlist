@@ -17,8 +17,8 @@ const configureStore = () => {
 
   // setting localStorage
   store.subscribe(throttle(() => {
-    const { auth, user } = store.getState();
-    saveState({ auth, user });
+    const { user } = store.getState();
+    saveState({ user });
   }, 1000));
 
   // sagaMiddleware.run(mainSaga);

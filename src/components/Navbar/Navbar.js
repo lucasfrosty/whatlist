@@ -1,5 +1,6 @@
 import React from 'react';
 import { connect } from 'react-redux';
+import * as firebase from 'firebase';
 import PropTypes from 'prop-types';
 import { Container, Menu } from 'semantic-ui-react';
 
@@ -11,7 +12,7 @@ import NavbarSearchInput from './NavbarSearchInput';
 
 import { getAPIData } from '../../utils/api';
 import { userLogin, userLogoff } from '../../dataflow/actions';
-import firebase, { facebookProvider, googleProvider } from '../../utils/firebase';
+import { facebookProvider, googleProvider } from '../../utils/firebase';
 
 const searchItemStyle = {
   marginLeft: 'auto',
@@ -45,18 +46,8 @@ class Navbar extends React.Component {
       .auth()
       .signInWithPopup(facebookProvider)
       .then((result) => {
-        const {
-          name, email, photoURL, displayName,
-        } = result.user;
-
         this.props.onUserLogin({
-          auth: true,
-          user: {
-            name,
-            email,
-            displayName,
-            photoURL,
-          },
+          user: result.user.providerData[0],
         });
       })
       .catch((err) => {
@@ -69,10 +60,12 @@ class Navbar extends React.Component {
       .auth()
       .signInWithPopup(googleProvider)
       .then((result) => {
-        console.log(result);
+        this.props.onUserLogin({
+          user: result.user.providerData,
+        });
       })
       .catch((err) => {
-        console.error(err);
+        console.log(err);
       });
   };
 
@@ -102,7 +95,7 @@ class Navbar extends React.Component {
   };
 
   render() {
-    const { user, auth } = this.props;
+    const { user } = this.props;
     const { isFetchingData, searchInfo } = this.state;
     return (
       <Menu fixed="top">
@@ -112,7 +105,7 @@ class Navbar extends React.Component {
             <NavbarSearchInput fetchData={this.fetchData} isFetchingData={isFetchingData} />
           </Menu.Item>
           <Menu.Item>
-            {auth ? (
+            {user !== null ? (
               <NavbarUserInfo user={user} logout={this.logout} />
             ) : (
               <NavbarLoginModal
@@ -132,7 +125,6 @@ class Navbar extends React.Component {
 }
 
 const mapStateToProps = state => ({
-  auth: state.auth,
   user: state.user,
 });
 

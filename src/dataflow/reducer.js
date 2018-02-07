@@ -1,7 +1,7 @@
 import { USER_LOGIN, USER_LOGOFF } from './types';
 
 const initialState = {
-  auth: false,
+  user: null,
 };
 
 export default (state = initialState, action) => {
@@ -15,8 +15,7 @@ export default (state = initialState, action) => {
     case USER_LOGOFF:
       return {
         ...state,
-        auth: false,
-        user: undefined,
+        user: null,
       };
     default:
       return state;
