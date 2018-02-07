@@ -10,6 +10,7 @@ import NavbarLoginModal from './NavbarLoginModal';
 import NavbarUserInfo from './NavbarUserInfo';
 import NavbarSearchInput from './NavbarSearchInput';
 
+import { convertGenresArray } from '../../utils/api';
 import { getAPIData } from '../../utils/api';
 import { userLogin, userLogoff } from '../../dataflow/actions';
 import { facebookProvider, googleProvider } from '../../utils/firebase';
@@ -85,11 +86,14 @@ class Navbar extends React.Component {
     getAPIData(inputValue, type, 'query')
       .then(arrayResponse => arrayResponse[0])
       .then((response) => {
-        this.setState({
-          searchInfo: {
-            ...response,
-            type,
-          },
+        convertGenresArray([response.genre_ids], type).then((genresToString) => {
+          this.setState({
+            searchInfo: {
+              ...response,
+              type,
+              genresToString: genresToString.join(', ').replace(/,/g, ', '),
+            },
+          });
         });
       });
   };
