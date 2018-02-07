@@ -3,11 +3,11 @@ import PropTypes from 'prop-types';
 import { Route, Redirect } from 'react-router-dom';
 import { connect } from 'react-redux';
 
-const PrivateRoute = ({ component: Component, ...rest, auth }) => (
+const PrivateRoute = ({ component: Component, ...rest, user }) => (
   <Route
     {...rest}
     render={props => (
-      auth ? <Component {...props} /> : (
+      user !== null ? <Component {...props} /> : (
         <Redirect
           to={{
             pathname: '/',
@@ -20,7 +20,7 @@ const PrivateRoute = ({ component: Component, ...rest, auth }) => (
 );
 
 PrivateRoute.propTypes = {
-  auth: PropTypes.bool.isRequired,
+  user: PropTypes.objectOf(PropTypes.any).isRequired,
   component: PropTypes.oneOfType([
     PropTypes.func,
     PropTypes.element,
@@ -29,7 +29,7 @@ PrivateRoute.propTypes = {
 };
 
 const mapStateToProps = state => ({
-  auth: state.auth,
+  user: state.user,
 });
 
 export default connect(mapStateToProps)(PrivateRoute);

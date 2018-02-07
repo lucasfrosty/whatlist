@@ -25,7 +25,6 @@ const searchItemStyle = {
 class Navbar extends React.Component {
   static propTypes = {
     user: PropTypes.objectOf(PropTypes.any).isRequired,
-    auth: PropTypes.bool.isRequired,
     onUserLogin: PropTypes.func.isRequired,
     onUserLogoff: PropTypes.func.isRequired,
   };
