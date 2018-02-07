@@ -10,10 +10,9 @@ import NavbarLoginModal from './NavbarLoginModal';
 import NavbarUserInfo from './NavbarUserInfo';
 import NavbarSearchInput from './NavbarSearchInput';
 
-import { convertGenresArray } from '../../utils/api';
-import { getAPIData } from '../../utils/api';
+import { getAPIData, convertGenresArray } from '../../utils/api';
 import { userLogin, userLogoff } from '../../dataflow/actions';
-import { facebookProvider, googleProvider } from '../../utils/firebase';
+import { facebookProvider, googleProvider, twitterProvider } from '../../utils/firebase';
 
 const searchItemStyle = {
   marginLeft: 'auto',
@@ -41,24 +40,19 @@ class Navbar extends React.Component {
     });
   };
 
-  loginWithFacebook = () => {
-    firebase
-      .auth()
-      .signInWithPopup(facebookProvider)
-      .then((result) => {
-        this.props.onUserLogin({
-          user: result.user.providerData[0],
-        });
-      })
-      .catch((err) => {
-        console.log(err);
-      });
-  };
+  loginWithProvider = (provider) => {
+    let prov;
+    if (provider === 'google') {
+      prov = googleProvider;
+    } else if (provider === 'twitter') {
+      prov = twitterProvider;
+    } else {
+      prov = facebookProvider;
+    }
 
-  loginWithGoogle = () => {
     firebase
       .auth()
-      .signInWithPopup(googleProvider)
+      .signInWithPopup(prov)
       .then((result) => {
         console.log(result);
         this.props.onUserLogin({
@@ -69,6 +63,8 @@ class Navbar extends React.Component {
         console.log(err);
       });
   };
+
+  loginWithFacebook
 
   logout = () => {
     firebase
@@ -113,8 +109,7 @@ class Navbar extends React.Component {
               <NavbarUserInfo user={user} logout={this.logout} />
             ) : (
               <NavbarLoginModal
-                loginWithFacebook={this.loginWithFacebook}
-                loginWithGoogle={this.loginWithGoogle}
+                loginWithProvider={this.loginWithProvider}
               />
             )}
           </Menu.Item>

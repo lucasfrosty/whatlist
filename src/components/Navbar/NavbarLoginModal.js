@@ -17,7 +17,7 @@ const BrandText = styled.p`
 `;
 
 
-const NavbarLoginModal = ({ loginWithFacebook, loginWithGoogle }) => (
+const NavbarLoginModal = ({ loginWithProvider }) => (
   <Modal size="mini" trigger={<Button color="blue">Login</Button>}>
     <Modal.Content>
       <BrandContainer>
@@ -36,17 +36,16 @@ const NavbarLoginModal = ({ loginWithFacebook, loginWithGoogle }) => (
       </Form>
       <Divider horizontal>Or you can login with:</Divider>
       <div style={{ textAlign: 'center' }}>
-        <Button circular color="facebook" icon="facebook" onClick={loginWithFacebook} />
-        <Button circular color="google plus" icon="google" onClick={loginWithGoogle} />
-        <Button circular color="twitter" icon="twitter" disabled />
+        <Button circular color="facebook" icon="facebook" onClick={() => loginWithProvider('facebook')} />
+        <Button circular color="google plus" icon="google" onClick={() => loginWithProvider('google')} />
+        <Button circular color="twitter" icon="twitter" onClick={() => loginWithProvider('twitter')} />
       </div>
     </Modal.Content>
   </Modal>
 );
 
 NavbarLoginModal.propTypes = {
-  loginWithFacebook: PropTypes.func.isRequired,
-  loginWithGoogle: PropTypes.func.isRequired,
+  loginWithProvider: PropTypes.func.isRequired,
 };
 
 export default NavbarLoginModal;
