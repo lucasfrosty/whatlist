@@ -60,8 +60,9 @@ class Navbar extends React.Component {
       .auth()
       .signInWithPopup(googleProvider)
       .then((result) => {
+        console.log(result);
         this.props.onUserLogin({
-          user: result.user.providerData,
+          user: result.user.providerData[0],
         });
       })
       .catch((err) => {
