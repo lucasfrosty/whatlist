@@ -29,6 +29,7 @@ const DetailsVideo = ({ videos }) => (
       {videos.results.map(video => (
         <Embed
           id={video.key}
+          key={video.key}
           iframe={{
             style: {
               width: 350,

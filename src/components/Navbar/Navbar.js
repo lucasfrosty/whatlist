@@ -1,16 +1,17 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import * as firebase from 'firebase';
+import { withRouter } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import { Container, Menu } from 'semantic-ui-react';
 
-import ContentInfoModal from '../ContentInfoModal';
+// import ContentInfoModal from '../ContentInfoModal';
 import NavbarBrand from './NavbarBrand';
 import NavbarLoginModal from './NavbarLoginModal';
 import NavbarUserInfo from './NavbarUserInfo';
 import NavbarSearchInput from './NavbarSearchInput';
 
-import { getAPIData, convertGenresArray } from '../../utils/api';
+import { getAPIData } from '../../utils/api';
 import { userLogin, userLogoff } from '../../dataflow/actions';
 import { facebookProvider, googleProvider, twitterProvider } from '../../utils/firebase';
 
@@ -24,20 +25,18 @@ const searchItemStyle = {
 
 class Navbar extends React.Component {
   static propTypes = {
-    user: PropTypes.objectOf(PropTypes.any).isRequired,
+    user: PropTypes.objectOf(PropTypes.any),
     onUserLogin: PropTypes.func.isRequired,
     onUserLogoff: PropTypes.func.isRequired,
+    history: PropTypes.objectOf(PropTypes.any).isRequired,
   };
+
+  static defaultProps = {
+    user: null,
+  }
 
   state = {
-    searchInfo: undefined,
     isFetchingData: false,
-  };
-
-  clearSearchInfo = () => {
-    this.setState({
-      searchInfo: undefined,
-    });
   };
 
   loginWithProvider = (provider) => {
@@ -64,8 +63,6 @@ class Navbar extends React.Component {
       });
   };
 
-  loginWithFacebook
-
   logout = () => {
     firebase
       .auth()
@@ -82,21 +79,13 @@ class Navbar extends React.Component {
     getAPIData(inputValue, type, 'query')
       .then(arrayResponse => arrayResponse[0])
       .then((response) => {
-        convertGenresArray([response.genre_ids], type).then((genresToString) => {
-          this.setState({
-            searchInfo: {
-              ...response,
-              type,
-              genresToString: genresToString.join(', ').replace(/,/g, ', '),
-            },
-          });
-        });
+        this.props.history.push(`/details/${type}/${response.id}`);
       });
   };
 
   render() {
     const { user } = this.props;
-    const { isFetchingData, searchInfo } = this.state;
+    const { isFetchingData } = this.state;
     return (
       <Menu fixed="top">
         <Container>
@@ -113,10 +102,6 @@ class Navbar extends React.Component {
               />
             )}
           </Menu.Item>
-
-          {searchInfo !== undefined && (
-            <ContentInfoModal info={searchInfo} clearSearchInfo={this.clearSearchInfo} />
-          )}
         </Container>
       </Menu>
     );
@@ -132,4 +117,4 @@ const mapDispatchToProps = {
   onUserLogoff: userLogoff,
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(Navbar);
+export default withRouter(connect(mapStateToProps, mapDispatchToProps)(Navbar));

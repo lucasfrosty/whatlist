@@ -55,9 +55,14 @@ const HomeComponent = ({ popularMoviesInfo, popularTVInfo }) => {
   );
 };
 
+HomeComponent.defaultProps = {
+  popularMoviesInfo: undefined,
+  popularTVInfo: undefined,
+};
+
 HomeComponent.propTypes = {
-  popularMoviesInfo: PropTypes.objectOf(PropTypes.any).isRequired,
-  popularTVInfo: PropTypes.objectOf(PropTypes.any).isRequired,
+  popularMoviesInfo: PropTypes.arrayOf(PropTypes.any),
+  popularTVInfo: PropTypes.arrayOf(PropTypes.any),
 };
 
 export default HomeComponent;
