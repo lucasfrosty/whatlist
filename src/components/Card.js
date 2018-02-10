@@ -8,7 +8,7 @@ import { getImage } from '../utils/api';
 
 const Container = styled.div`
   display: ${props => (props.hidden ? 'none' : 'block')};
-  margin: 0 5px 30px 5px;
+  margin: 20px;
   max-width: 210px;
 `;
 

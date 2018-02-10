@@ -1,6 +1,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import * as firebase from 'firebase';
 import { Container, Dimmer, Loader } from 'semantic-ui-react';
+import { connect } from 'react-redux';
 
 import { getAPIData } from '../../utils/api';
 
@@ -22,6 +24,18 @@ class Details extends React.Component {
         id: PropTypes.string,
       }),
     }).isRequired,
+    user: PropTypes.shape({
+      uid: PropTypes.string,
+      displayName: PropTypes.string,
+      photoURL: PropTypes.string,
+      email: PropTypes.string,
+      phoneNumber: PropTypes.string,
+      providerId: PropTypes.string,
+    }),
+  };
+
+  static defaultProps = {
+    user: null,
   };
 
   state = {
@@ -29,25 +43,39 @@ class Details extends React.Component {
   };
 
   componentDidMount() {
-    console.log('fui renderizado');
     const { id, type } = this.props.match.params;
     getAPIData(id, type, 'id').then((res) => {
-      console.log('fui renderizado', res);
       this.setState({ info: res });
     });
   }
 
   componentDidUpdate(prevProps) {
-    console.log('UPDATEE!!');
     const { id, type } = this.props.match.params;
 
     if (id !== prevProps.match.params.id && type !== prevProps.match.params.id) {
-      console.log('MUDOU A ROTA!!');
       getAPIData(id, type, 'id').then((res) => {
         this.setState({ info: res });
       });
     }
   }
+
+  addToWhatlistHandler = (info) => {
+    const ref = firebase.database().ref(this.props.user.uid);
+    ref.on('value', (snapshot) => {
+      let bool;
+      snapshot.forEach((childSnapshot) => {
+        console.log(childSnapshot.val());
+
+        if (childSnapshot.val().id === info.id) {
+          bool = true;
+        }
+      });
+
+      if (!bool) {
+        ref.push().set(info);
+      }
+    });
+  };
 
   render() {
     const { type } = this.props.match.params;
@@ -57,7 +85,12 @@ class Details extends React.Component {
       const { videos } = info;
       return (
         <Container style={containerStyles}>
-          <DetailsInfo info={info} type={type} />
+          <DetailsInfo
+            info={info}
+            type={type}
+            addToWhatlistHandler={this.addToWhatlistHandler}
+            auth={Boolean(this.props.user)}
+          />
           {videos.results.length > 0 ? <DetailsVideo videos={videos} /> : null}
         </Container>
       );
@@ -71,4 +104,8 @@ class Details extends React.Component {
   }
 }
 
-export default Details;
+const mapStateToProps = state => ({
+  user: state.user,
+});
+
+export default connect(mapStateToProps, null)(Details);

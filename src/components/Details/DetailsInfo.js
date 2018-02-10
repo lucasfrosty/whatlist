@@ -1,7 +1,12 @@
 import React from 'react';
 import styled from 'styled-components';
 import PropTypes from 'prop-types';
-import { Image, Divider } from 'semantic-ui-react';
+import {
+  Image,
+  Divider,
+  Button,
+  Icon,
+} from 'semantic-ui-react';
 
 import { getImage } from '../../utils/api';
 import { convertDate, convertMoney } from '../../utils/conversor';
@@ -63,7 +68,7 @@ const AditionalInfoContainer = styled.div`
   justify-content: space-between;
 `;
 
-const DetailsInfo = ({ info, type }) => {
+const DetailsInfo = ({ info, type, addToWhatlistHandler, auth }) => {
   const {
     name,
     title,
@@ -75,6 +80,7 @@ const DetailsInfo = ({ info, type }) => {
     release_date,
     vote_average,
     runtime,
+    id,
     revenue,
     first_air_date,
   } = info;
@@ -113,6 +119,27 @@ const DetailsInfo = ({ info, type }) => {
             ? <DetailsAditionalInfo title="Box Office" content={formatRevenue(revenue)} />
             : <DetailsAditionalInfo title="Status" content={status} />
           }
+
+          {auth && (
+            <Button
+              inverted
+              color="green"
+              onClick={() => addToWhatlistHandler({
+                id,
+                title: title || '',
+                name: name || '',
+                vote_average,
+                type,
+              })}
+              style={{ marginTop: 30, display: 'flex', padding: 14 }}
+            >
+              <Icon name="plus" style={{ fontSize: 14 }} />
+              <span style={{ letterSpacing: 0.8, fontSize: 12 }}>
+                ADD TO WHATLIST
+              </span>
+            </Button>
+          )}
+
         </AditionalInfoContainer>
       </InfoItem>
     </InfoContainer>
@@ -122,6 +149,8 @@ const DetailsInfo = ({ info, type }) => {
 DetailsInfo.propTypes = {
   type: PropTypes.string.isRequired,
   info: PropTypes.objectOf(PropTypes.any).isRequired,
+  addToWhatlistHandler: PropTypes.func.isRequired,
+  auth: PropTypes.bool.isRequired,
 };
 
 export default DetailsInfo;
