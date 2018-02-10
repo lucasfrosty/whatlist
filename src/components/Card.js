@@ -2,41 +2,31 @@ import React, { Component } from 'react';
 import styled from 'styled-components';
 import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
-import { Card, Icon, Image } from 'semantic-ui-react';
+import { Card, Image } from 'semantic-ui-react';
 
 import { getImage } from '../utils/api';
 
 const Container = styled.div`
   display: ${props => (props.hidden ? 'none' : 'block')};
   margin: 0 5px 30px 5px;
+  max-width: 210px;
 `;
 
-const Rating = styled.span`
-  float: right;
-  font-size: 14px;
-  .icon {
-    margin-right: 0;
-  }
-`;
-
-const Meta = styled.span`
-  font-size: 12px;
-`;
+// const Rating = styled.span`
+//   float: right;
+//   font-size: 14px;
+//   .icon {
+//     margin-right: 0;
+//   }
+// `;
 
 class CardInfo extends Component {
-  truncateWord = (str, len) => {
-    let trimmedString = str.substr(0, len);
-    trimmedString = trimmedString.substr(
-      0,
-      Math.min(trimmedString.length, trimmedString.lastIndexOf(' ')),
-    );
-
-    return trimmedString;
-  };
+  componentDidMount() {
+  }
 
   render() {
     const {
-      title, name, vote_average, poster_path, genresToString, type, id,
+      title, name, poster_path, type, id,
     } = this.props.info;
     return (
       <Container hidden={this.props.hidden}>
@@ -50,16 +40,9 @@ class CardInfo extends Component {
             />
           </Link>
           <Card.Content>
-            <Card.Header>
+            <Card.Header textAlign="center" style={{ fontSize: 15 }}>
               {title || name}
-              <Rating>
-                <Icon color="yellow" name="star" />
-                {vote_average}
-              </Rating>
             </Card.Header>
-          </Card.Content>
-          <Card.Content extra style={{ padding: '0.3em 1em 0.6em' }}>
-            <Meta>{genresToString}</Meta>
           </Card.Content>
         </Card>
       </Container>
