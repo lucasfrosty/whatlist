@@ -1,49 +1,122 @@
+/* eslint-disable jsx-a11y/mouse-events-have-key-events */
 import React, { Component } from 'react';
 import styled from 'styled-components';
 import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
-import { Card, Image } from 'semantic-ui-react';
+import { Card, Image, Icon } from 'semantic-ui-react';
 
 import { getImage } from '../../utils/api';
+import { convertDate } from '../../utils/conversor';
 
 const Container = styled.div`
   display: ${props => (props.hidden ? 'none' : 'block')};
   margin: 20px;
-  max-width: 210px;
+  max-width: 230px;
+  transition: 1.5s;
+
+  &:hover {
+    max-width: 235px;
+  }
 `;
 
-// const Rating = styled.span`
-//   float: right;
-//   font-size: 14px;
-//   .icon {
-//     margin-right: 0;
-//   }
-// `;
+const ReleaseDate = styled.p`
+  color: #808f85;
+  font-size: 11px;
+`;
+
+const Rating = styled.span`
+  position: absolute;
+  color: white;
+  float: right;
+  top: 90%;
+  left: 75%;
+  font-weight: 800;
+  font-size: 19px;
+  text-align: center;
+
+  .icon {
+    margin-right: 0;
+  }
+`;
+
+const Title = styled.span`
+  position: absolute;
+  color: white;
+  top: 90%;
+  padding-left: 7px;
+  font-weight: 800;
+  font-size: 19px;
+  text-align: center;
+`;
+
+const CenteredIcon = styled.div`
+  position: absolute;
+  top: 50%;
+  left: calc(50% - 2em);
+  z-index: 3;
+`;
 
 class CardInfo extends Component {
-  componentDidMount() {
-  }
+  state = {
+    isHovering: false,
+  };
+
+  onHoverHandler = () => {
+    this.setState({
+      isHovering: true,
+    });
+  };
+
+  outHoverHandler = () => {
+    this.setState({
+      isHovering: false,
+    });
+  };
+
+  truncateWord = (str, len) => str.substr(0, len);
 
   render() {
     const {
-      title, name, poster_path, type, id,
+      title,
+      name,
+      poster_path,
+      type,
+      id,
+      vote_average,
+      release_date,
+      first_air_date,
     } = this.props.info;
+    const { isHovering } = this.state;
     return (
       <Container hidden={this.props.hidden}>
-        <Card style={{ height: '100%' }}>
-          <Link to={`/details/${type}/${id}`}>
+        <Link to={`/details/${type}/${id}`}>
+          <Card
+            onMouseOver={this.onHoverHandler}
+            onMouseOut={this.outHoverHandler}
+            style={{ transition: '.5s', position: 'relative' }}
+          >
             <Image
               size="medium"
               centered
               src={getImage(poster_path, 300)}
+              style={isHovering ? { filter: 'brightness(30%)', transition: '.5s' } : null}
             />
-          </Link>
-          <Card.Content>
-            <Card.Header textAlign="center" style={{ fontSize: 15 }}>
-              {title || name}
-            </Card.Header>
-          </Card.Content>
-        </Card>
+            <div style={!isHovering ? { visibility: 'hidden' } : null}>
+              <CenteredIcon>
+                <Icon size="huge" style={{ color: '#fff', lineHeight: 0 }} name="zoom" />
+              </CenteredIcon>
+              <Rating>
+                <Icon color="yellow" name="star" />
+                {vote_average.toFixed(1)}
+              </Rating>
+              <Title>
+                {title
+                  ? title.length > 16 ? `${this.truncateWord(title, 16)}...` : title
+                  : name.length > 16 ? `${this.truncateWord(name, 16)}...` : name}
+              </Title>
+            </div>
+          </Card>
+        </Link>
       </Container>
     );
   }

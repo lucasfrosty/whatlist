@@ -68,7 +68,9 @@ const AditionalInfoContainer = styled.div`
   justify-content: space-between;
 `;
 
-const DetailsInfo = ({ info, type, addToWhatlistHandler, auth }) => {
+const DetailsInfo = ({
+  info, type, addToWhatlistHandler, auth,
+}) => {
   const {
     name,
     title,
@@ -113,7 +115,7 @@ const DetailsInfo = ({ info, type, addToWhatlistHandler, auth }) => {
           <DetailsAditionalInfo title="Genres" content={genresName} />
           <DetailsAditionalInfo
             title="Runtime"
-            content={`${runtime || episode_run_time[0]} mins`}
+            content={episode_run_time || runtime ? `${runtime || episode_run_time[0]} mins` : '-'}
           />
           {type === 'movie'
             ? <DetailsAditionalInfo title="Box Office" content={formatRevenue(revenue)} />
