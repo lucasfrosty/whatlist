@@ -12,7 +12,7 @@ const HomeComponent = ({ popularMoviesInfo, popularTVInfo }) => {
     const shouldDisplayContent = (content === undefined);
 
     return (
-      <Tab.Pane loading={shouldDisplayContent}>
+      <Tab.Pane loading={shouldDisplayContent} style={{ marginTop: 40 }}>
         {shouldDisplayContent || <CardContainer>{displayCards(content)}</CardContainer>}
       </Tab.Pane>
     );

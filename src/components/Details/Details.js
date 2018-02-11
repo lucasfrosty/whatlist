@@ -14,7 +14,7 @@ import DetailsInfo from './DetailsInfo';
 const containerStyles = {
   backgroundColor: '#fff',
   border: '1px solid #d4d4d5',
-  paddingTop: 80,
+  marginTop: 80,
 };
 
 class Details extends React.Component {
@@ -95,7 +95,7 @@ class Details extends React.Component {
       );
     }
 
-    return <LoadingSpinner />
+    return <LoadingSpinner />;
   }
 }
 

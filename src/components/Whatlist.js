@@ -8,6 +8,12 @@ import LoadingSpinner from './LoadingSpinner';
 import Card from './Card/Card';
 import CardContainer from './Card/CardContainer';
 
+const containerStyles = {
+  backgroundColor: '#fff',
+  border: '1px solid #d4d4d5',
+  marginTop: 80,
+};
+
 class Whatlist extends React.Component {
   static propTypes = {
     userId: PropTypes.string.isRequired,
@@ -32,7 +38,7 @@ class Whatlist extends React.Component {
   render() {
     const { firebaseData } = this.state;
     return firebaseData ? (
-      <Container style={{ marginTop: 100 }}>
+      <Container style={containerStyles}>
         <CardContainer>
           {Object.keys(firebaseData).map(key => <Card key={key} info={firebaseData[key]} />)}
         </CardContainer>
