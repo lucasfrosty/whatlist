@@ -1,16 +1,9 @@
 import React from 'react';
-import styled from 'styled-components';
 import PropTypes from 'prop-types';
 import { Tab, Button, Container } from 'semantic-ui-react';
 
-import Card from '../Card';
-
-const CardContainer = styled.div`
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
-  margin: 15px auto;
-`;
+import Card from '../Card/Card';
+import CardContainer from '../Card/CardContainer';
 
 const HomeComponent = ({ popularMoviesInfo, popularTVInfo }) => {
   const renderTabPane = (content) => {

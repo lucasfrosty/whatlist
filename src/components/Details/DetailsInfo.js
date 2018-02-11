@@ -130,6 +130,7 @@ const DetailsInfo = ({ info, type, addToWhatlistHandler, auth }) => {
                 name: name || '',
                 vote_average,
                 type,
+                poster_path,
               })}
               style={{ marginTop: 30, display: 'flex', padding: 14 }}
             >

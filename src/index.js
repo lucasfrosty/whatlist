@@ -10,7 +10,7 @@ const store = configureStore();
 
 /* eslint-disable no-unused-expressions */
 injectGlobal`
-  #root {
+  body {
     background-color: #E9EAEE;
   }
 `;

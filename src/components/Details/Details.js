@@ -1,9 +1,10 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import * as firebase from 'firebase';
-import { Container, Dimmer, Loader } from 'semantic-ui-react';
+import { Container } from 'semantic-ui-react';
 import { connect } from 'react-redux';
 
+import LoadingSpinner from '../LoadingSpinner';
 import { getAPIData } from '../../utils/api';
 
 // components
@@ -64,8 +65,6 @@ class Details extends React.Component {
     ref.on('value', (snapshot) => {
       let bool;
       snapshot.forEach((childSnapshot) => {
-        console.log(childSnapshot.val());
-
         if (childSnapshot.val().id === info.id) {
           bool = true;
         }
@@ -96,11 +95,7 @@ class Details extends React.Component {
       );
     }
 
-    return (
-      <Dimmer active>
-        <Loader>Loading...</Loader>
-      </Dimmer>
-    );
+    return <LoadingSpinner />
   }
 }
 

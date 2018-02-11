@@ -4,7 +4,7 @@ import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
 import { Card, Image } from 'semantic-ui-react';
 
-import { getImage } from '../utils/api';
+import { getImage } from '../../utils/api';
 
 const Container = styled.div`
   display: ${props => (props.hidden ? 'none' : 'block')};
@@ -33,7 +33,6 @@ class CardInfo extends Component {
         <Card style={{ height: '100%' }}>
           <Link to={`/details/${type}/${id}`}>
             <Image
-              onClick={this.props.clearSearchInfo || null}
               size="medium"
               centered
               src={getImage(poster_path, 300)}
@@ -52,12 +51,10 @@ class CardInfo extends Component {
 
 CardInfo.defaultProps = {
   hidden: false,
-  clearSearchInfo: undefined,
 };
 
 CardInfo.propTypes = {
   info: PropTypes.objectOf(PropTypes.any).isRequired,
-  clearSearchInfo: PropTypes.func,
   hidden: PropTypes.bool,
 };
 
