@@ -40,7 +40,9 @@ class Whatlist extends React.Component {
     return firebaseData ? (
       <Container style={containerStyles}>
         <CardContainer>
-          {Object.keys(firebaseData).map(key => <Card key={key} info={firebaseData[key]} />)}
+          {Object.keys(firebaseData).map(key => (
+            <Card showRemoveButton key={key} info={firebaseData[key]} />
+          ))}
         </CardContainer>
       </Container>
     ) : (
