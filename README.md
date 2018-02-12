@@ -13,3 +13,5 @@ First, clone the repo:
 https://github.com/lucasfrosty/whatlist.git
 ```
 ps: if you don't have git installed, just download this project by clicking here:
+
+![Download repo](https://github.com/lucasfrosty/whatlist/blob/master/imgs/download.jpg)
