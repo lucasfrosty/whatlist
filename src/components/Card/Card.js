@@ -6,7 +6,6 @@ import { Link } from 'react-router-dom';
 import { Card, Image, Icon } from 'semantic-ui-react';
 
 import { getImage } from '../../utils/api';
-import { convertDate } from '../../utils/conversor';
 
 const Container = styled.div`
   display: ${props => (props.hidden ? 'none' : 'block')};
@@ -19,10 +18,10 @@ const Container = styled.div`
   }
 `;
 
-const ReleaseDate = styled.p`
-  color: #808f85;
-  font-size: 11px;
-`;
+// const ReleaseDate = styled.p`
+//   color: #808f85;
+//   font-size: 11px;
+// `;
 
 const Rating = styled.span`
   position: absolute;
@@ -73,7 +72,13 @@ class CardInfo extends Component {
     });
   };
 
-  truncateWord = (str, len) => str.substr(0, len);
+  truncateString = (str, len) => {
+    if (str.length > len) {
+      return `${str.substr(0, len)}...`;
+    }
+
+    return str;
+  }
 
   render() {
     const {
@@ -83,9 +88,8 @@ class CardInfo extends Component {
       type,
       id,
       vote_average,
-      release_date,
-      first_air_date,
     } = this.props.info;
+
     const { isHovering } = this.state;
     return (
       <Container hidden={this.props.hidden}>
@@ -111,8 +115,9 @@ class CardInfo extends Component {
               </Rating>
               <Title>
                 {title
-                  ? title.length > 16 ? `${this.truncateWord(title, 16)}...` : title
-                  : name.length > 16 ? `${this.truncateWord(name, 16)}...` : name}
+                  ? this.truncateString(title, 16)
+                  : this.truncateString(name, 16)
+                }
               </Title>
             </div>
           </Card>
