@@ -48,7 +48,7 @@ const Title = styled.span`
   text-align: center;
 `;
 
-const CloseBtn = styled.button`
+const RemoveBtn = styled.button`
   position: absolute;
   top: 0.5%;
   border: 0;
@@ -68,6 +68,12 @@ const CenteredIcon = styled.div`
 class CardInfo extends Component {
   state = {
     isHovering: false,
+  };
+
+  onRemoveButtonClick = (e) => {
+    const { removeButtonHandler, objKey } = this.props;
+    e.preventDefault();
+    removeButtonHandler(objKey);
   };
 
   onHoverHandler = () => {
@@ -91,13 +97,14 @@ class CardInfo extends Component {
   };
 
   render() {
+    const { hidden, showRemoveButton } = this.props;
+    const { isHovering } = this.state;
     const {
       title, name, poster_path, type, id, vote_average,
     } = this.props.info;
 
-    const { isHovering } = this.state;
     return (
-      <Container hidden={this.props.hidden}>
+      <Container hidden={hidden}>
         <Link to={`/details/${type}/${id}`}>
           <Card
             onMouseOver={this.onHoverHandler}
@@ -111,14 +118,14 @@ class CardInfo extends Component {
               style={isHovering ? { filter: 'brightness(30%)', transition: '.5s' } : null}
             />
             <div style={!isHovering ? { visibility: 'hidden' } : null}>
-              {this.props.showRemoveButton && (
-                <CloseBtn>
+              {showRemoveButton && (
+                <RemoveBtn onClick={this.onRemoveButtonClick}>
                   <img
                     src="https://png.icons8.com/material/50/ffffff/delete-sign.png"
                     alt="Close button"
                     width={25}
                   />
-                </CloseBtn>
+                </RemoveBtn>
               )}
               <CenteredIcon>
                 <Icon size="huge" style={{ color: '#fff', lineHeight: 0 }} name="zoom" />
@@ -141,12 +148,16 @@ class CardInfo extends Component {
 CardInfo.defaultProps = {
   hidden: false,
   showRemoveButton: false,
+  objKey: undefined,
+  removeButtonHandler: undefined,
 };
 
 CardInfo.propTypes = {
   info: PropTypes.objectOf(PropTypes.any).isRequired,
   hidden: PropTypes.bool,
   showRemoveButton: PropTypes.bool,
+  objKey: PropTypes.string,
+  removeButtonHandler: PropTypes.func,
 };
 
 export default CardInfo;

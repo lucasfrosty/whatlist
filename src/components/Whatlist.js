@@ -35,13 +35,23 @@ class Whatlist extends React.Component {
       });
   }
 
+  removeButtonHandler = (key) => {
+    firebase.database().ref(this.props.userId).child(key).remove();
+  }
+
   render() {
     const { firebaseData } = this.state;
     return firebaseData ? (
       <Container style={containerStyles}>
         <CardContainer>
           {Object.keys(firebaseData).map(key => (
-            <Card showRemoveButton key={key} info={firebaseData[key]} />
+            <Card
+              showRemoveButton
+              key={key}
+              objKey={key}
+              info={firebaseData[key]}
+              removeButtonHandler={this.removeButtonHandler}
+            />
           ))}
         </CardContainer>
       </Container>
