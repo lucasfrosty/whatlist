@@ -48,18 +48,22 @@ class Details extends React.Component {
     const { id, type } = this.props.match.params;
     getAPIData(id, type, 'id').then((info) => {
       let keyOnWhatlist = null;
-      firebase
-        .database()
-        .ref(this.props.user.uid)
-        .once('value')
-        .then((snapshot) => {
-          snapshot.forEach((key) => {
-            if (key.val().id === info.id) {
-              keyOnWhatlist = key.key;
-            }
-          });
-        })
-        .then(() => this.setState({ info, keyOnWhatlist }));
+      if (this.props.user) {
+        firebase
+          .database()
+          .ref(this.props.user.uid)
+          .once('value')
+          .then((snapshot) => {
+            snapshot.forEach((key) => {
+              if (key.val().id === info.id) {
+                keyOnWhatlist = key.key;
+              }
+            });
+          })
+          .then(() => this.setState({ info, keyOnWhatlist }));
+      } else {
+        this.setState({ info, keyOnWhatlist });
+      }
     });
   }
 
