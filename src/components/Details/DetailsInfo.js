@@ -1,12 +1,7 @@
 import React from 'react';
 import styled from 'styled-components';
 import PropTypes from 'prop-types';
-import {
-  Image,
-  Divider,
-  Button,
-  Icon,
-} from 'semantic-ui-react';
+import { Image, Divider, Button, Icon } from 'semantic-ui-react';
 
 import { getImage } from '../../utils/api';
 import { convertDate, convertMoney } from '../../utils/conversor';
@@ -69,7 +64,7 @@ const AditionalInfoContainer = styled.div`
 `;
 
 const DetailsInfo = ({
-  info, type, addToWhatlistHandler, auth,
+  info, type, addToWhatlist, auth, keyOnWhatlist, removeOfWhatlist,
 }) => {
   const {
     name,
@@ -88,6 +83,7 @@ const DetailsInfo = ({
   } = info;
   const genresName = genres.map(genre => genre.name).join(', ');
   const formatRevenue = rev => (rev ? convertMoney.format(rev) : '-');
+  console.log('KEY', keyOnWhatlist);
 
   return (
     <InfoContainer>
@@ -117,32 +113,44 @@ const DetailsInfo = ({
             title="Runtime"
             content={episode_run_time || runtime ? `${runtime || episode_run_time[0]} mins` : '-'}
           />
-          {type === 'movie'
-            ? <DetailsAditionalInfo title="Box Office" content={formatRevenue(revenue)} />
-            : <DetailsAditionalInfo title="Status" content={status} />
-          }
+          {type === 'movie' ? (
+            <DetailsAditionalInfo title="Box Office" content={formatRevenue(revenue)} />
+          ) : (
+            <DetailsAditionalInfo title="Status" content={status} />
+          )}
 
-          {auth && (
+          {(auth && !keyOnWhatlist) && (
             <Button
               inverted
               color="green"
-              onClick={() => addToWhatlistHandler({
-                id,
-                title: title || '',
-                name: name || '',
-                vote_average,
-                type,
-                poster_path,
-              })}
+              onClick={() =>
+                addToWhatlist({
+                  id,
+                  title: title || '',
+                  name: name || '',
+                  vote_average,
+                  type,
+                  poster_path,
+                })
+              }
               style={{ marginTop: 30, display: 'flex', padding: 14 }}
             >
               <Icon name="plus" style={{ fontSize: 14 }} />
-              <span style={{ letterSpacing: 0.8, fontSize: 12 }}>
-                ADD TO WHATLIST
-              </span>
+              <span style={{ letterSpacing: 0.8, fontSize: 12 }}>ADD TO WHATLIST</span>
             </Button>
           )}
 
+          {(auth && keyOnWhatlist) && (
+            <Button
+              inverted
+              color="red"
+              onClick={removeOfWhatlist}
+              style={{ marginTop: 30, display: 'flex', padding: 14 }}
+            >
+              <Icon name="trash" style={{ fontSize: 14 }} />
+              <span style={{ letterSpacing: 0.8, fontSize: 12 }}>REMOVE FROM WHATLIST</span>
+            </Button>
+          )}
         </AditionalInfoContainer>
       </InfoItem>
     </InfoContainer>
@@ -152,7 +160,9 @@ const DetailsInfo = ({
 DetailsInfo.propTypes = {
   type: PropTypes.string.isRequired,
   info: PropTypes.objectOf(PropTypes.any).isRequired,
-  addToWhatlistHandler: PropTypes.func.isRequired,
+  addToWhatlist: PropTypes.func.isRequired,
+  removeOfWhatlist: PropTypes.func.isRequired,
+  keyOnWhatlist: PropTypes.string.isRequired,
   auth: PropTypes.bool.isRequired,
 };
 

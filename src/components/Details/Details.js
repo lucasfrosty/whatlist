@@ -41,33 +41,44 @@ class Details extends React.Component {
 
   state = {
     info: undefined,
+    keyOnWhatlist: null,
   };
 
   componentDidMount() {
     const { id, type } = this.props.match.params;
-    getAPIData(id, type, 'id').then((res) => {
-      this.setState({ info: res });
+    getAPIData(id, type, 'id').then((info) => {
+      let keyOnWhatlist = null;
+      firebase
+        .database()
+        .ref(this.props.user.uid)
+        .once('value')
+        .then((snapshot) => {
+          snapshot.forEach((key) => {
+            const idValue = key.val().id;
+            console.log(idValue === info.id);
+            if (idValue === info.id) {
+              keyOnWhatlist = idValue;
+            }
+          });
+        })
+        .then(() => this.setState({ info, keyOnWhatlist }));
     });
   }
 
-  componentDidUpdate(prevProps) {
-    const { id, type } = this.props.match.params;
+  addToWhatlist = (info) => {
+    firebase
+      .database()
+      .ref(this.props.user.uid)
+      .push()
+      .set(info);
+  };
 
-    if (id !== prevProps.match.params.id && type !== prevProps.match.params.id) {
-      getAPIData(id, type, 'id').then((res) => {
-        this.setState({ info: res });
-      });
-    }
-  }
-
-  addToWhatlistHandler = (info) => {
-    const ref = firebase.database().ref(this.props.user.uid);
-    ref.push().set(info);
+  removeOfWhatlist = () => {
   };
 
   render() {
     const { type } = this.props.match.params;
-    const { info } = this.state;
+    const { info, keyOnWhatlist } = this.state;
 
     if (info) {
       const { videos } = info;
@@ -76,7 +87,9 @@ class Details extends React.Component {
           <DetailsInfo
             info={info}
             type={type}
-            addToWhatlistHandler={this.addToWhatlistHandler}
+            addToWhatlist={this.addToWhatlist}
+            keyOnWhatlist={keyOnWhatlist}
+            removeOfWhatlist={this.removeOfWhatlist}
             auth={Boolean(this.props.user)}
           />
           {videos.results.length > 0 ? <DetailsVideo videos={videos} /> : null}
