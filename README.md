@@ -18,7 +18,7 @@ git clone https://github.com/lucasfrosty/whatlist.git
 npm i
 ```
 
-3. Configure the ``.env`` variables of the application.
+3. [Configure the ``.env`` variables of the application.](https://github.com/lucasfrosty/whatlist/wiki/Configure-.env-file)
 
 4. After the variables configuration, start the project on localhost:
 ```bash
