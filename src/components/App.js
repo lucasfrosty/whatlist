@@ -5,7 +5,7 @@ import Home from './Home/Home';
 import Navbar from './Navbar/Navbar';
 import Details from './Details/Details';
 import ProtectedRoute from './ProtectedRoute';
-import Whatlist from './Whatlist';
+import Whatlist from './Whatlist/Whatlist';
 
 const App = () => (
   <BrowserRouter>

@@ -3,10 +3,11 @@ import PropTypes from 'prop-types';
 import * as firebase from 'firebase';
 import { connect } from 'react-redux';
 
-import LoadingSpinner from './LoadingSpinner';
-import Card from './Card/Card';
-import CardContainer from './Card/CardContainer';
-import CustomContainer from './CustomContainer';
+import LoadingSpinner from '../LoadingSpinner';
+import Card from '../Card/Card';
+import CardContainer from '../Card/CardContainer';
+import CustomContainer from '../CustomContainer';
+import EmptyWhatlistMsg from './EmptyWhatlistMsg';
 
 class Whatlist extends React.Component {
   static propTypes = {
@@ -45,11 +46,11 @@ class Whatlist extends React.Component {
 
     return !isFetchingData ? (
       <CustomContainer>
-        <CardContainer>
-          {isFirebaseDataAnEmptyObject ? (
-            <h1>:)</h1>
-          ) : (
-            Object.keys(firebaseData).map(key => (
+        {isFirebaseDataAnEmptyObject ? (
+          <EmptyWhatlistMsg />
+        ) : (
+          <CardContainer>
+            {Object.keys(firebaseData).map(key => (
               <Card
                 showRemoveButton
                 key={key}
@@ -57,9 +58,9 @@ class Whatlist extends React.Component {
                 info={firebaseData[key]}
                 removeButtonHandler={this.removeButtonHandler}
               />
-            ))
-          )}
-        </CardContainer>
+            ))}
+          </CardContainer>
+        )}
       </CustomContainer>
     ) : (
       <LoadingSpinner />
