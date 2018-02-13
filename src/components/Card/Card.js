@@ -109,13 +109,13 @@ class CardInfo extends Component {
           <Card
             onMouseOver={this.onHoverHandler}
             onMouseOut={this.outHoverHandler}
-            style={{ transition: '.5s', position: 'relative' }}
+            style={{ transition: '.2s', position: 'relative' }}
           >
             <Image
               size="medium"
               centered
               src={getImage(poster_path, 300)}
-              style={isHovering ? { filter: 'brightness(30%)', transition: '.5s' } : null}
+              style={isHovering ? { filter: 'brightness(20%)', transition: '.3s' } : null}
             />
             <div style={!isHovering ? { visibility: 'hidden' } : null}>
               {showRemoveButton && (

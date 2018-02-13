@@ -1,4 +1,3 @@
-/* eslint-disable consistent-return */
 import axios from 'axios';
 
 const API_KEY = process.env.REACT_APP_TMDB_API_KEY;
@@ -40,28 +39,21 @@ export const getImage = (image_path, size) =>
   `https://image.tmdb.org/t/p/w${size}${image_path}`;
 
 
-/**
- * @description Given an genre_ids array, convert to string and display it on the provided Query
- * @param {arrayOf(genres_ids)} genres - The Array with the genres, provided by the API.
- * @param {string: 'movie' or 'tv'} type - Defining if it is a Movie or a TV Show
- * @param {string} selector - A query selector to define where to put the list converted
- * @returns nothing (i'm not happy with this approach but was the only way i founded)
- */
-export const convertGenresArray = async (genresArray, type) => {
-  try {
-    const genresURL = `https://api.themoviedb.org/3/genre/${type}/list?api_key=${API_KEY}&language=en-US`;
+// export const convertGenresArray = async (genresArray, type) => {
+//   try {
+//     const genresURL = `https://api.themoviedb.org/3/genre/${type}/list?api_key=${API_KEY}&language=en-US`;
 
-    const request = await axios(genresURL);
-    const genresListFromAPI = await request.data.genres;
+//     const request = await axios(genresURL);
+//     const genresListFromAPI = await request.data.genres;
 
-    const result = genresArray.map(genres => genres.map(genre =>
-      genresListFromAPI.filter(genreFromAPI => genreFromAPI.id === genre).map(g => g.name)));
+//     const result = genresArray.map(genres => genres.map(genre =>
+//       genresListFromAPI.filter(genreFromAPI => genreFromAPI.id === genre).map(g => g.name)));
 
-    return result;
-  } catch (e) {
-    console.error(e);
-  }
-};
+//     return result;
+//   } catch (e) {
+//     console.error(e);
+//   }
+// };
 
 export const getPopular = async (type) => {
   try {
@@ -70,17 +62,16 @@ export const getPopular = async (type) => {
 
     const response = await axios(URL);
     const results = await response.data.results;
-    const resultGenresArrays = results.map(r => r.genre_ids);
-    const genresToString = await convertGenresArray(resultGenresArrays, type);
 
-    const resultsWithTypeAndGenres = results.map((r, index) => ({
+    const resultsWithType = results.map(r => ({
       ...r,
       type,
-      genresToString: genresToString[index].join(', '),
     }));
 
-    return Promise.all(resultsWithTypeAndGenres);
+    return Promise.all(resultsWithType);
   } catch (e) {
     console.error(e);
   }
+
+  return null;
 };
