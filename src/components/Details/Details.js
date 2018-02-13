@@ -64,6 +64,16 @@ class Details extends React.Component {
     });
   }
 
+  componentDidUpdate(prevProps) {
+    const { id, type } = this.props.match.params;
+
+    if (id !== prevProps.match.params.id && type !== prevProps.match.params.id) {
+      getAPIData(id, type, 'id').then((res) => {
+        this.setState({ info: res });
+      });
+    }
+  }
+
   setIsFetchingDataToTrue = () => this.setState({ isFetchingData: true });
 
   /**

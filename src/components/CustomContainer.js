@@ -13,7 +13,7 @@ const CustomContainer = ({ children }) => <Container style={containerStyles}>{ch
 CustomContainer.propTypes = {
   children: PropTypes.oneOfType([
     PropTypes.element,
-    PropTypes.arrayOf(PropTypes.element)
+    PropTypes.arrayOf(PropTypes.element),
   ]).isRequired,
 };
 
