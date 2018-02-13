@@ -62,18 +62,7 @@ class Details extends React.Component {
 
   addToWhatlistHandler = (info) => {
     const ref = firebase.database().ref(this.props.user.uid);
-    ref.on('value', (snapshot) => {
-      let bool;
-      snapshot.forEach((childSnapshot) => {
-        if (childSnapshot.val().id === info.id) {
-          bool = true;
-        }
-      });
-
-      if (!bool) {
-        ref.push().set(info);
-      }
-    });
+    ref.push().set(info);
   };
 
   render() {
