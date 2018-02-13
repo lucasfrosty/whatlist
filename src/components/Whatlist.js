@@ -20,7 +20,8 @@ class Whatlist extends React.Component {
   };
 
   state = {
-    firebaseData: undefined,
+    firebaseData: {},
+    isFetchingData: true,
   };
 
   componentDidMount() {
@@ -30,29 +31,49 @@ class Whatlist extends React.Component {
       .once('value')
       .then((snapshot) => {
         this.setState({
-          firebaseData: snapshot.val(),
+          firebaseData: snapshot.val() || {},
+          isFetchingData: false,
         });
       });
   }
 
   removeButtonHandler = (key) => {
-    firebase.database().ref(this.props.userId).child(key).remove();
-  }
+    const newFirebaseData = this.state.firebaseData;
+    delete newFirebaseData[key];
+
+    firebase
+      .database()
+      .ref(this.props.userId)
+      .set(newFirebaseData, (error) => {
+        if (error) {
+          console.error(error);
+        } else {
+          this.setState({ firebaseData: newFirebaseData });
+        }
+      });
+  };
 
   render() {
-    const { firebaseData } = this.state;
-    return firebaseData ? (
+    const { isFetchingData, firebaseData } = this.state;
+    const isFirebaseDataAnEmptyObject =
+      Object.keys(firebaseData).length === 0 && firebaseData.constructor === Object;
+
+    return !isFetchingData ? (
       <Container style={containerStyles}>
         <CardContainer>
-          {Object.keys(firebaseData).map(key => (
-            <Card
-              showRemoveButton
-              key={key}
-              objKey={key}
-              info={firebaseData[key]}
-              removeButtonHandler={this.removeButtonHandler}
-            />
-          ))}
+          {isFirebaseDataAnEmptyObject ? (
+            <h1>:)</h1>
+          ) : (
+            Object.keys(firebaseData).map(key => (
+              <Card
+                showRemoveButton
+                key={key}
+                objKey={key}
+                info={firebaseData[key]}
+                removeButtonHandler={this.removeButtonHandler}
+              />
+            ))
+          )}
         </CardContainer>
       </Container>
     ) : (
