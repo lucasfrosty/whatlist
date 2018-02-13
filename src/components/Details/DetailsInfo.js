@@ -83,7 +83,6 @@ const DetailsInfo = ({
   } = info;
   const genresName = genres.map(genre => genre.name).join(', ');
   const formatRevenue = rev => (rev ? convertMoney.format(rev) : '-');
-  console.log('KEY', keyOnWhatlist);
 
   return (
     <InfoContainer>
@@ -144,7 +143,7 @@ const DetailsInfo = ({
             <Button
               inverted
               color="red"
-              onClick={removeOfWhatlist}
+              onClick={() => removeOfWhatlist(keyOnWhatlist)}
               style={{ marginTop: 30, display: 'flex', padding: 14 }}
             >
               <Icon name="trash" style={{ fontSize: 14 }} />

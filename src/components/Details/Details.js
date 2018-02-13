@@ -54,10 +54,8 @@ class Details extends React.Component {
         .once('value')
         .then((snapshot) => {
           snapshot.forEach((key) => {
-            const idValue = key.val().id;
-            console.log(idValue === info.id);
-            if (idValue === info.id) {
-              keyOnWhatlist = idValue;
+            if (key.val().id === info.id) {
+              keyOnWhatlist = key.key;
             }
           });
         })
@@ -73,7 +71,8 @@ class Details extends React.Component {
       .set(info);
   };
 
-  removeOfWhatlist = () => {
+  removeOfWhatlist = (key) => {
+    firebase.database().ref(this.props.user.uid).child(key).remove();
   };
 
   render() {
