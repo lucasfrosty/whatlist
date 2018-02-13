@@ -2,17 +2,11 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import * as firebase from 'firebase';
 import { connect } from 'react-redux';
-import { Container } from 'semantic-ui-react';
 
 import LoadingSpinner from './LoadingSpinner';
 import Card from './Card/Card';
 import CardContainer from './Card/CardContainer';
-
-const containerStyles = {
-  backgroundColor: '#fff',
-  border: '1px solid #d4d4d5',
-  marginTop: 80,
-};
+import CustomContainer from './CustomContainer';
 
 class Whatlist extends React.Component {
   static propTypes = {
@@ -50,7 +44,7 @@ class Whatlist extends React.Component {
       Object.keys(firebaseData).length === 0 && firebaseData.constructor === Object;
 
     return !isFetchingData ? (
-      <Container style={containerStyles}>
+      <CustomContainer>
         <CardContainer>
           {isFirebaseDataAnEmptyObject ? (
             <h1>:)</h1>
@@ -66,7 +60,7 @@ class Whatlist extends React.Component {
             ))
           )}
         </CardContainer>
-      </Container>
+      </CustomContainer>
     ) : (
       <LoadingSpinner />
     );

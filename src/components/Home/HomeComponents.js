@@ -8,7 +8,7 @@ import CardContainer from '../Card/CardContainer';
 const HomeComponent = ({ popularMoviesInfo, popularTVInfo }) => {
   const renderTabPane = (content) => {
     const displayCards = contentArray =>
-      contentArray.map((movie, index) => <Card hidden={index >= 10} key={movie.id} info={movie} />);
+      contentArray.map(movie => <Card key={movie.id} info={movie} />);
     const shouldDisplayContent = (content === undefined);
 
     return (

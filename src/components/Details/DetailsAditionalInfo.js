@@ -9,21 +9,14 @@ const AditionalInfoWrappedContainer = styled.div`
   flex-basis: 50%;
 `;
 
-const Subtitle = styled.h2`
+const Title = styled.h2`
   font-size: 13px;
   letter-spacing: 1px;
   text-transform: uppercase;
   margin-bottom: 0;
 `;
 
-const Rating = styled.span`
-  font-size: 15px;
-  .icon {
-    margin-right: 0;
-  }
-`;
-
-const Genres = styled.span`
+const Content = styled.span`
   font-family: 'Inconsolata';
   font-size: 15px;
   color: #808f85;
@@ -31,10 +24,8 @@ const Genres = styled.span`
 
 const DetailsAditionalInfo = ({ title, content }) => (
   <AditionalInfoWrappedContainer>
-    <Subtitle>{title}</Subtitle>
-    <Rating>
-      <Genres>{content}</Genres>
-    </Rating>
+    <Title>{title}</Title>
+    <Content>{content}</Content>
   </AditionalInfoWrappedContainer>
 );
 

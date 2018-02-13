@@ -1,7 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import * as firebase from 'firebase';
-import { Container } from 'semantic-ui-react';
 import { connect } from 'react-redux';
 
 import LoadingSpinner from '../LoadingSpinner';
@@ -10,12 +9,7 @@ import { getAPIData } from '../../utils/api';
 // components
 import DetailsVideo from './DetailsVideo';
 import DetailsInfo from './DetailsInfo';
-
-const containerStyles = {
-  backgroundColor: '#fff',
-  border: '1px solid #d4d4d5',
-  marginTop: 80,
-};
+import CustomContainer from '../CustomContainer';
 
 class Details extends React.Component {
   static propTypes = {
@@ -49,7 +43,8 @@ class Details extends React.Component {
     const { id, type } = this.props.match.params;
     getAPIData(id, type, 'id').then((info) => {
       let keyOnWhatlist = null;
-      if (this.props.user) {
+      if (this.props.user) { // if the user is authenticated
+        // this will check if the Content are already on the whatlist or not
         firebase
           .database()
           .ref(this.props.user.uid)
@@ -63,6 +58,7 @@ class Details extends React.Component {
           })
           .then(() => this.setState({ info, keyOnWhatlist }));
       } else {
+        // that's not reason to check because the whatlist doesn't exists (since there's no user)
         this.setState({ info, keyOnWhatlist });
       }
     });
@@ -70,23 +66,32 @@ class Details extends React.Component {
 
   setIsFetchingDataToTrue = () => this.setState({ isFetchingData: true });
 
+  /**
+   * @description will add a content to the user's whatlist
+   * @param {object} info - the content basic information (just what'll be displayed on the card)
+   * @memberof Details
+   */
   addToWhatlist = (info) => {
     firebase
       .database()
       .ref(this.props.user.uid)
       .push()
       .set(info)
-      .then(() => this.setState({ isFetchingData: false }));
+      .then(() => this.setState({ isFetchingData: false })); // ending spinner effect on button
   };
 
-
+  /**
+   * @description return a content from whatlist
+   * @param {string} key - the key reference of the content in the user's Object on Firebase
+   * @memberof Details
+   */
   removeOfWhatlist = (key) => {
     firebase
       .database()
       .ref(this.props.user.uid)
       .child(key)
       .remove()
-      .then(() => this.setState({ isFetchingData: false }));
+      .then(() => this.setState({ isFetchingData: false })); // ending spinner effect on button
   };
 
   render() {
@@ -96,7 +101,7 @@ class Details extends React.Component {
     if (info) {
       const { videos } = info;
       return (
-        <Container style={containerStyles}>
+        <CustomContainer>
           <DetailsInfo
             info={info}
             type={type}
@@ -108,7 +113,7 @@ class Details extends React.Component {
             isFetchingData={isFetchingData}
           />
           {videos.results.length > 0 ? <DetailsVideo videos={videos} /> : null}
-        </Container>
+        </CustomContainer>
       );
     }
 

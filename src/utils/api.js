@@ -1,7 +1,9 @@
 import axios from 'axios';
 
+// TMDB API KEY
 const API_KEY = process.env.REACT_APP_TMDB_API_KEY;
 
+// Types of content, decided to use variables to avoid typos
 export const TYPES = {
   movie: 'movie',
   tv: 'tv',

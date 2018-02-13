@@ -1,3 +1,5 @@
+// NOT USING THIS
+// KEEPING FOR REMINDING PURPOSES
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Modal } from 'semantic-ui-react';

@@ -3,6 +3,9 @@ import PropTypes from 'prop-types';
 import { Route, Redirect } from 'react-router-dom';
 import { connect } from 'react-redux';
 
+/* this Component check if the user is authenticated
+ * if is not, will automatically redirect to the Home Page
+ * TODO: redirect to the last page that the user was (instead of the Home Page) */
 const PrivateRoute = ({ component: Component, ...rest, user }) => (
   <Route
     {...rest}

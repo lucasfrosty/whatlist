@@ -73,7 +73,7 @@ class CardInfo extends Component {
   onRemoveButtonClick = (e) => {
     const { removeButtonHandler, objKey } = this.props;
     e.preventDefault();
-    removeButtonHandler(objKey);
+    removeButtonHandler(objKey); // functions passed as props on Whatlist component
   };
 
   onHoverHandler = () => {
@@ -88,6 +88,13 @@ class CardInfo extends Component {
     });
   };
 
+  /**
+   * @description - will truncate a string that has more than x digits.
+   * @param {string} str - the string to be truncated
+   * @param {number} len - the length that a string should have (at least) to be truncated
+   * @returns {string} - the truncated string (if it's length is bigger than the len param)
+   * @memberof CardInfo
+   */
   truncateString = (str, len) => {
     if (str.length > len) {
       return `${str.substr(0, len)}...`;

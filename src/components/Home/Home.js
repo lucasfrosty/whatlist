@@ -12,6 +12,7 @@ class Home extends Component {
     popularTVInfo: undefined,
   };
 
+  // getting both the Popular Movies and the Popular TV shows
   componentDidMount() {
     getPopular(TYPES.movie).then(res => this.setState({ popularMoviesInfo: res }));
     getPopular(TYPES.tv).then(res => this.setState({ popularTVInfo: res }));

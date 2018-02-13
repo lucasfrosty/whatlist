@@ -88,7 +88,12 @@ const DetailsInfo = ({
     revenue,
     first_air_date,
   } = info;
+
+  /* getting only the names of the genres
+   * i did this because the API provide both "name" and "id", and i just will display the ID */
   const genresName = genres.map(genre => genre.name).join(', ');
+
+  // formating the revenue into regular money formation (using dollar sign)
   const formatRevenue = rev => (rev ? convertMoney.format(rev) : '-');
 
   return (
@@ -131,7 +136,7 @@ const DetailsInfo = ({
                 inverted
                 color="green"
                 onClick={() => {
-                  setIsFetchingDataToTrue();
+                  setIsFetchingDataToTrue(); // func to create the spinner effect on the button
                   addToWhatlist({
                     id,
                     title: title || '',
@@ -158,7 +163,7 @@ const DetailsInfo = ({
                 inverted
                 color="red"
                 onClick={() => {
-                  setIsFetchingDataToTrue();
+                  setIsFetchingDataToTrue(); // func to create the spinner effect on the button
                   removeOfWhatlist(keyOnWhatlist);
                 }}
                 style={{ marginTop: 30, display: 'flex', padding: 14 }}

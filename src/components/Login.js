@@ -1,5 +1,5 @@
 // NOT USING THIS FOR NOW
-// JUST KEEPING FOR REMIND PORPURSES
+// JUST KEEPING FOR REMIND PURPOSES
 
 import React from 'react';
 import PropTypes from 'prop-types';
