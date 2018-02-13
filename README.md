@@ -10,7 +10,7 @@ An application to store all movies and TV shows that you want to watch (just lik
 ## Installation
 1. First, clone the repo:
 ```bash
-https://github.com/lucasfrosty/whatlist.git
+git clone https://github.com/lucasfrosty/whatlist.git
 ```
 
 2. Install the libs:
