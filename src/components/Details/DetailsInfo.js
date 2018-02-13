@@ -64,7 +64,14 @@ const AditionalInfoContainer = styled.div`
 `;
 
 const DetailsInfo = ({
-  info, type, addToWhatlist, auth, keyOnWhatlist, removeOfWhatlist,
+  info,
+  type,
+  addToWhatlist,
+  auth,
+  keyOnWhatlist,
+  removeOfWhatlist,
+  isFetchingData,
+  setIsFetchingDataToTrue,
 }) => {
   const {
     name,
@@ -118,38 +125,52 @@ const DetailsInfo = ({
             <DetailsAditionalInfo title="Status" content={status} />
           )}
 
-          {(auth && !keyOnWhatlist) && (
-            <Button
-              inverted
-              color="green"
-              onClick={() =>
-                addToWhatlist({
-                  id,
-                  title: title || '',
-                  name: name || '',
-                  vote_average,
-                  type,
-                  poster_path,
-                })
-              }
-              style={{ marginTop: 30, display: 'flex', padding: 14 }}
-            >
-              <Icon name="plus" style={{ fontSize: 14 }} />
-              <span style={{ letterSpacing: 0.8, fontSize: 12 }}>ADD TO WHATLIST</span>
-            </Button>
-          )}
+          {auth &&
+            !keyOnWhatlist && (
+              <Button
+                inverted
+                color="green"
+                onClick={() => {
+                  setIsFetchingDataToTrue();
+                  addToWhatlist({
+                    id,
+                    title: title || '',
+                    name: name || '',
+                    vote_average,
+                    type,
+                    poster_path,
+                  });
+                }}
+                style={{ marginTop: 30, display: 'flex', padding: 14 }}
+              >
+                <Icon
+                  loading={isFetchingData}
+                  name={isFetchingData ? 'spinner' : 'plus'}
+                  style={{ fontSize: 14 }}
+                />
+                <span style={{ letterSpacing: 0.8, fontSize: 12 }}>ADD TO WHATLIST</span>
+              </Button>
+            )}
 
-          {(auth && keyOnWhatlist) && (
-            <Button
-              inverted
-              color="red"
-              onClick={() => removeOfWhatlist(keyOnWhatlist)}
-              style={{ marginTop: 30, display: 'flex', padding: 14 }}
-            >
-              <Icon name="trash" style={{ fontSize: 14 }} />
-              <span style={{ letterSpacing: 0.8, fontSize: 12 }}>REMOVE FROM WHATLIST</span>
-            </Button>
-          )}
+          {auth &&
+            keyOnWhatlist && (
+              <Button
+                inverted
+                color="red"
+                onClick={() => {
+                  setIsFetchingDataToTrue();
+                  removeOfWhatlist(keyOnWhatlist);
+                }}
+                style={{ marginTop: 30, display: 'flex', padding: 14 }}
+              >
+                <Icon
+                  loading={isFetchingData}
+                  name={isFetchingData ? 'spinner' : 'trash'}
+                  style={{ fontSize: 14 }}
+                />
+                <span style={{ letterSpacing: 0.8, fontSize: 12 }}>REMOVE FROM WHATLIST</span>
+              </Button>
+            )}
         </AditionalInfoContainer>
       </InfoItem>
     </InfoContainer>
@@ -163,6 +184,8 @@ DetailsInfo.propTypes = {
   removeOfWhatlist: PropTypes.func.isRequired,
   keyOnWhatlist: PropTypes.string.isRequired,
   auth: PropTypes.bool.isRequired,
+  isFetchingData: PropTypes.bool.isRequired,
+  setIsFetchingDataToTrue: PropTypes.func.isRequired,
 };
 
 export default DetailsInfo;

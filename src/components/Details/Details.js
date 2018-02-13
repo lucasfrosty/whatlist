@@ -42,6 +42,7 @@ class Details extends React.Component {
   state = {
     info: undefined,
     keyOnWhatlist: null,
+    isFetchingData: false,
   };
 
   componentDidMount() {
@@ -67,21 +68,30 @@ class Details extends React.Component {
     });
   }
 
+  setIsFetchingDataToTrue = () => this.setState({ isFetchingData: true });
+
   addToWhatlist = (info) => {
     firebase
       .database()
       .ref(this.props.user.uid)
       .push()
-      .set(info);
+      .set(info)
+      .then(() => this.setState({ isFetchingData: false }));
   };
 
+
   removeOfWhatlist = (key) => {
-    firebase.database().ref(this.props.user.uid).child(key).remove();
+    firebase
+      .database()
+      .ref(this.props.user.uid)
+      .child(key)
+      .remove()
+      .then(() => this.setState({ isFetchingData: false }));
   };
 
   render() {
     const { type } = this.props.match.params;
-    const { info, keyOnWhatlist } = this.state;
+    const { info, keyOnWhatlist, isFetchingData } = this.state;
 
     if (info) {
       const { videos } = info;
@@ -94,6 +104,8 @@ class Details extends React.Component {
             keyOnWhatlist={keyOnWhatlist}
             removeOfWhatlist={this.removeOfWhatlist}
             auth={Boolean(this.props.user)}
+            setIsFetchingDataToTrue={this.setIsFetchingDataToTrue}
+            isFetchingData={isFetchingData}
           />
           {videos.results.length > 0 ? <DetailsVideo videos={videos} /> : null}
         </Container>
