@@ -28,8 +28,7 @@ class Whatlist extends React.Component {
     firebase
       .database()
       .ref(this.props.userId)
-      .once('value')
-      .then((snapshot) => {
+      .on('value', (snapshot) => {
         this.setState({
           firebaseData: snapshot.val() || {},
           isFetchingData: false,
@@ -38,19 +37,11 @@ class Whatlist extends React.Component {
   }
 
   removeButtonHandler = (key) => {
-    const newFirebaseData = this.state.firebaseData;
-    delete newFirebaseData[key];
-
     firebase
       .database()
       .ref(this.props.userId)
-      .set(newFirebaseData, (error) => {
-        if (error) {
-          console.error(error);
-        } else {
-          this.setState({ firebaseData: newFirebaseData });
-        }
-      });
+      .child(key)
+      .remove();
   };
 
   render() {
