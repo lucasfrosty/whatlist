@@ -90,7 +90,7 @@ const DetailsInfo = ({
   } = info;
 
   /* getting only the names of the genres
-   * i did this because the API provide both "name" and "id", and i just will display the ID */
+   * i did this because the API provide both "name" and "id", and i just will display the name */
   const genresName = genres.map(genre => genre.name).join(', ');
 
   // formating the revenue into regular money formation (using dollar sign)
