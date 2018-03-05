@@ -34,7 +34,6 @@ class Login extends React.Component {
   }
 
   render() {
-    console.log('XDD', this.props.location);
     const { from } = this.props.location.state || { from: { pathname: '/' } };
 
     return (

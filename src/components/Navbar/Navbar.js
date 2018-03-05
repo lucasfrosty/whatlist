@@ -41,36 +41,27 @@ class Navbar extends React.Component {
 
   loginWithProvider = (provider) => {
     let prov;
-    if (provider === 'google') {
-      prov = googleProvider;
-    } else if (provider === 'twitter') {
-      prov = twitterProvider;
-    } else {
+    if (provider === 'google') prov = googleProvider;
+    else if (provider === 'twitter') prov = twitterProvider;
+    else {
       prov = facebookProvider;
     }
 
-    firebase
-      .auth()
-      .signInWithPopup(prov)
-      .then((result) => {
-        console.log(result);
-        this.props.onUserLogin({
-          user: result.user.providerData[0],
-        });
-      })
+    firebase.auth().signInWithPopup(prov).then((result) => {
+      this.props.onUserLogin({
+        user: result.user.providerData[0],
+      });
+    })
       .catch((err) => {
         console.log(err);
       });
   };
 
   logout = () => {
-    firebase
-      .auth()
-      .signOut()
+    firebase.auth().signOut()
       .then(() => {
         this.props.onUserLogoff();
-      })
-      .catch((err) => {
+      }).catch((err) => {
         console.error(err);
       });
   };
