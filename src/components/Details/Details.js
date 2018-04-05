@@ -58,7 +58,7 @@ class Details extends React.Component {
           })
           .then(() => this.setState({ info, keyOnWhatlist }));
       } else {
-        // that's not reason to check because the whatlist doesn't exists (since there's no user)
+        // here, there's no reason to do the check because the whatlist doesn't exists (since there's no user)
         this.setState({ info, keyOnWhatlist });
       }
     });
