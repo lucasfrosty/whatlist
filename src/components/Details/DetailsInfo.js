@@ -96,6 +96,23 @@ const DetailsInfo = ({
   // formating the revenue into regular money formation (using dollar sign)
   const formatRevenue = rev => (rev ? convertMoney.format(rev) : '-');
 
+  const addToWhatlistClickHandler = () => {
+    setIsFetchingDataToTrue(); // func to create the spinner effect on the button
+    addToWhatlist({
+      id,
+      title: title || '',
+      name: name || '',
+      vote_average,
+      type,
+      poster_path,
+    });
+  };
+
+  const removeToWhatlistClickHandler = () => {
+    setIsFetchingDataToTrue(); // func to create the spinner effect on the button
+    removeOfWhatlist(keyOnWhatlist);
+  };
+
   return (
     <InfoContainer>
       <Image
@@ -135,17 +152,7 @@ const DetailsInfo = ({
               <Button
                 inverted
                 color="green"
-                onClick={() => {
-                  setIsFetchingDataToTrue(); // func to create the spinner effect on the button
-                  addToWhatlist({
-                    id,
-                    title: title || '',
-                    name: name || '',
-                    vote_average,
-                    type,
-                    poster_path,
-                  });
-                }}
+                onClick={addToWhatlistClickHandler}
                 style={{ marginTop: 30, display: 'flex', padding: 14 }}
               >
                 <Icon
@@ -162,10 +169,7 @@ const DetailsInfo = ({
               <Button
                 inverted
                 color="red"
-                onClick={() => {
-                  setIsFetchingDataToTrue(); // func to create the spinner effect on the button
-                  removeOfWhatlist(keyOnWhatlist);
-                }}
+                onClick={removeToWhatlistClickHandler}
                 style={{ marginTop: 30, display: 'flex', padding: 14 }}
               >
                 <Icon
