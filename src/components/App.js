@@ -8,7 +8,7 @@ import ProtectedRoute from './ProtectedRoute';
 import Whatlist from './Whatlist/Whatlist';
 
 const App = () => (
-  <BrowserRouter>
+  <BrowserRouter basename={process.env.PUBLIC_URL}>
     <Fragment>
       <Navbar />
       <Switch>
