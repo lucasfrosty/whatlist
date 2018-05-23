@@ -8,7 +8,7 @@ import { Card, Image, Icon } from 'semantic-ui-react';
 import { getImage } from '../../utils/api';
 
 const Container = styled.div`
-  display: ${props => (props.hidden ? 'none' : 'block')};
+  display: ${(props) => (props.hidden ? 'none' : 'block')};
   margin: 20px;
   max-width: 230px;
   transition: 1.5s;
@@ -17,11 +17,6 @@ const Container = styled.div`
     max-width: 235px;
   }
 `;
-
-// const ReleaseDate = styled.p`
-//   color: #808f85;
-//   font-size: 11px;
-// `;
 
 const Rating = styled.span`
   position: absolute;

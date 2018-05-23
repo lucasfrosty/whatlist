@@ -1,34 +1,6 @@
 {
-  "extends": [
-    "airbnb"
-  ],
-  "plugins": [
-    "prettier"
-  ],
-  "parser": "babel-eslint",
-  "env": {
-    "browser": true
-  },
+  "extends": "@lucasfrosty/eslint-config",
   "rules": {
-    "react/jsx-filename-extension": 0,
-    "camelcase": "off",
-    "jsx-a11y/anchor-is-valid": [
-      "error",
-      {
-        "components": [
-          "Link"
-        ],
-        "specialLink": [
-          "to",
-          "hrefLeft",
-          "hrefRight"
-        ],
-        "aspects": [
-          "noHref",
-          "invalidHref",
-          "preferButton"
-        ]
-      }
-    ]
+    "no-process-env": "off"
   }
 }

@@ -9,7 +9,9 @@ const Container = styled.div`
   margin: 15px auto;
 `;
 
-const CardContainer = ({ children }) => <Container>{children}</Container>;
+function CardContainer({ children }) {
+  return <Container>{children}</Container>;
+}
 
 CardContainer.propTypes = {
   children: PropTypes.oneOfType([
