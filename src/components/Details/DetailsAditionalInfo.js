@@ -22,12 +22,15 @@ const Content = styled.span`
   color: #808f85;
 `;
 
-const DetailsAditionalInfo = ({ title, content }) => (
-  <AditionalInfoWrappedContainer>
-    <Title>{title}</Title>
-    <Content>{content}</Content>
-  </AditionalInfoWrappedContainer>
-);
+function DetailsAditionalInfo({ title, content }) {
+  return (
+    <AditionalInfoWrappedContainer>
+      <Title>{title}</Title>
+      <Content>{content}</Content>
+    </AditionalInfoWrappedContainer>
+  );
+}
+
 
 DetailsAditionalInfo.propTypes = {
   title: PropTypes.string.isRequired,

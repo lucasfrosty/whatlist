@@ -39,44 +39,9 @@ class Details extends React.Component {
     isFetchingData: false,
   };
 
-  componentDidMount() {
-    const { id, type } = this.props.match.params;
-    getAPIData(id, type, 'id').then((info) => {
-      let keyOnWhatlist = null;
-      if (this.props.user) { // if the user is authenticated
-        // this will check if the Content are already on the whatlist or not
-        firebase
-          .database()
-          .ref(this.props.user.uid)
-          .once('value')
-          .then((snapshot) => {
-            snapshot.forEach((key) => {
-              if (key.val().id === info.id) {
-                keyOnWhatlist = key.key;
-              }
-            });
-          })
-          .then(() => this.setState({ info, keyOnWhatlist }));
-      } else {
-        // here, there's no reason to do the check because the whatlist doesn't exists (since there's no user)
-        this.setState({ info, keyOnWhatlist });
-      }
-    });
-  }
-
-  componentDidUpdate(prevProps) {
-    const { id, type } = this.props.match.params;
-
-    if (id !== prevProps.match.params.id && type !== prevProps.match.params.id) {
-      getAPIData(id, type, 'id').then((res) => {
-        this.setState({ info: res });
-      });
-    }
-  }
-
   setIsFetchingDataToTrue = () => this.setState({ isFetchingData: true });
 
-  /**
+    /**
    * @description will add a content to the user's whatlist
    * @param {object} info - the content basic information (just what'll be displayed on the card)
    * @memberof Details
@@ -87,7 +52,8 @@ class Details extends React.Component {
       .ref(this.props.user.uid)
       .push()
       .set(info)
-      .then(() => this.setState({ isFetchingData: false })); // ending spinner effect on button
+      .then(() => this.setState({ isFetchingData: false }))
+      .catch((err) => console.error(err));
   };
 
   /**
@@ -101,8 +67,43 @@ class Details extends React.Component {
       .ref(this.props.user.uid)
       .child(key)
       .remove()
-      .then(() => this.setState({ isFetchingData: false })); // ending spinner effect on button
+      .then(() => this.setState({ isFetchingData: false }))
+      .catch((err) => console.error(err));
   };
+
+  componentDidMount() {
+    const { id, type } = this.props.match.params;
+    getAPIData(id, type, 'id').then(async (info) => {
+      let keyOnWhatlist = null;
+
+      if (this.props.user) {
+        // this will check if the Content are already on the whatlist or not
+        const snapshot = await firebase.database().ref(this.props.user.uid).once('value');
+        await snapshot.forEach((key) => {
+          if (key.val().id === info.id) {
+            keyOnWhatlist = key.key;
+          }
+        });
+        this.setState({ info, keyOnWhatlist });
+      } else {
+        // here, there's no reason to do the check because the whatlist doesn't exists (since there's no user)
+        this.setState({ info, keyOnWhatlist });
+      }
+
+    }).catch((err) => console.error(err));
+  }
+
+  componentDidUpdate(prevProps) {
+    const { id, type } = this.props.match.params;
+
+    if (id !== prevProps.match.params.id && type !== prevProps.match.params.id) {
+      getAPIData(id, type, 'id')
+        .then((res) => {
+          this.setState({ info: res });
+        })
+        .catch((err) => console.error(err));
+    }
+  }
 
   render() {
     const { type } = this.props.match.params;
@@ -110,6 +111,7 @@ class Details extends React.Component {
 
     if (info) {
       const { videos } = info;
+      const renderVideos = videos.results.length > 0 ? <DetailsVideo videos={videos} /> : null;
       return (
         <CustomContainer>
           <DetailsInfo
@@ -122,7 +124,7 @@ class Details extends React.Component {
             setIsFetchingDataToTrue={this.setIsFetchingDataToTrue}
             isFetchingData={isFetchingData}
           />
-          {videos.results.length > 0 ? <DetailsVideo videos={videos} /> : null}
+          {renderVideos}
         </CustomContainer>
       );
     }
@@ -131,8 +133,8 @@ class Details extends React.Component {
   }
 }
 
-const mapStateToProps = state => ({
-  user: state.user,
-});
+function mapStateToProps(state) {
+  return { user: state.user };
+}
 
 export default connect(mapStateToProps, null)(Details);

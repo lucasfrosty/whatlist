@@ -4,7 +4,7 @@ const initialState = {
   user: null,
 };
 
-export default (state = initialState, action) => {
+function reducer(state = initialState, action) {
   switch (action.type) {
     case USER_LOGIN:
       return {
@@ -20,4 +20,6 @@ export default (state = initialState, action) => {
     default:
       return state;
   }
-};
+}
+
+export default reducer;

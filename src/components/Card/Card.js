@@ -1,4 +1,5 @@
 /* eslint-disable jsx-a11y/mouse-events-have-key-events */
+/* eslint-disable camelcase */
 import React, { Component } from 'react';
 import styled from 'styled-components';
 import PropTypes from 'prop-types';
@@ -65,10 +66,11 @@ class CardInfo extends Component {
     isHovering: false,
   };
 
-  onRemoveButtonClick = (e) => {
+  onRemoveButtonClick = (evt) => {
     const { removeButtonHandler, objKey } = this.props;
-    e.preventDefault();
-    removeButtonHandler(objKey); // functions passed as props on Whatlist component
+    evt.preventDefault();
+    // functions passed as props on Whatlist component
+    removeButtonHandler(objKey);
   };
 
   onHoverHandler = () => {
@@ -105,6 +107,12 @@ class CardInfo extends Component {
       title, name, poster_path, type, id, vote_average,
     } = this.props.info;
 
+    const displayTitleOrName = title ? this.truncateString(title, 16) : this.truncateString(name, 16);
+    const conditionalStyles = {
+      imageHovering: isHovering ? { filter: 'brightness(20%)', transition: '.3s' } : null,
+      hidden: isHovering ? null : { visibility: 'hidden' },
+    };
+
     return (
       <Container hidden={hidden}>
         <Link to={`/details/${type}/${id}`}>
@@ -117,9 +125,9 @@ class CardInfo extends Component {
               size="medium"
               centered
               src={getImage(poster_path, 300)}
-              style={isHovering ? { filter: 'brightness(20%)', transition: '.3s' } : null}
+              style={conditionalStyles.imageHovering}
             />
-            <div style={!isHovering ? { visibility: 'hidden' } : null}>
+            <div style={conditionalStyles.hidden}>
               {showRemoveButton && (
                 <RemoveBtn onClick={this.onRemoveButtonClick}>
                   <img
@@ -137,7 +145,7 @@ class CardInfo extends Component {
                 {vote_average.toFixed(1)}
               </Rating>
               <Title>
-                {title ? this.truncateString(title, 16) : this.truncateString(name, 16)}
+                {displayTitleOrName}
               </Title>
             </div>
           </Card>

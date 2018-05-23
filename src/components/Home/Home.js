@@ -14,8 +14,13 @@ class Home extends Component {
 
   // getting both the Popular Movies and the Popular TV shows
   componentDidMount() {
-    getPopular(TYPES.movie).then(res => this.setState({ popularMoviesInfo: res }));
-    getPopular(TYPES.tv).then(res => this.setState({ popularTVInfo: res }));
+    getPopular(TYPES.movie)
+      .then((res) => this.setState({ popularMoviesInfo: res }))
+      .catch((err) => console.error(err));
+
+    getPopular(TYPES.tv)
+      .then((res) => this.setState({ popularTVInfo: res }))
+      .catch((err) => console.log(err));
   }
 
   render() {

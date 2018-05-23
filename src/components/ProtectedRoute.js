@@ -6,21 +6,18 @@ import { connect } from 'react-redux';
 /* this Component check if the user is authenticated
  * if is not, will automatically redirect to the Home Page
  * TODO: redirect to the last page that the user was (instead of the Home Page) */
-const PrivateRoute = ({ component: Component, ...rest, user }) => (
-  <Route
-    {...rest}
-    render={props => (
-      user !== null ? <Component {...props} /> : (
-        <Redirect
-          to={{
-            pathname: '/',
-            state: { from: props.location },
-          }}
-        />
-      )
-    )}
-  />
-);
+function PrivateRoute({ component: Component, user, ...rest }) {
+  return (
+    <Route
+      {...rest}
+      render={(props) => (
+        user === null
+          ? <Redirect to={{ pathname: '/', state: { from: props.location } }} />
+          : <Component {...props} />
+      )}
+    />
+  );
+}
 
 PrivateRoute.propTypes = {
   user: PropTypes.objectOf(PropTypes.any).isRequired,
@@ -31,8 +28,10 @@ PrivateRoute.propTypes = {
   location: PropTypes.objectOf(PropTypes.any).isRequired,
 };
 
-const mapStateToProps = state => ({
-  user: state.user,
-});
+function mapStateToProps(state) {
+  return {
+    user: state.user,
+  };
+}
 
 export default connect(mapStateToProps)(PrivateRoute);

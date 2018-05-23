@@ -22,29 +22,31 @@ const embedItemStyle = {
   padding: 0,
 };
 
-const DetailsVideo = ({ videos }) => (
-  <VideoContainer>
-    <Divider horizontal><span style={{ fontSize: 30 }}>Videos</span></Divider>
-    <EmbedContainer>
-      {videos.results.map(video => (
-        <Embed
-          id={video.key}
-          key={video.key}
-          iframe={{
-            style: {
-              width: 350,
-              height: 212,
-            },
-          }}
-          style={embedItemStyle}
-          source="youtube"
-          active
-          autoplay={false}
-        />
-      ))}
-    </EmbedContainer>
-  </VideoContainer>
-);
+function DetailsVideo({ videos }) {
+  return (
+    <VideoContainer>
+      <Divider horizontal><span style={{ fontSize: 30 }}>Videos</span></Divider>
+      <EmbedContainer>
+        {videos.results.map((video) => (
+          <Embed
+            id={video.key}
+            key={video.key}
+            iframe={{
+              style: {
+                width: 350,
+                height: 212,
+              },
+            }}
+            style={embedItemStyle}
+            source="youtube"
+            active
+            autoplay={false}
+          />
+        ))}
+      </EmbedContainer>
+    </VideoContainer>
+  );
+}
 
 DetailsVideo.propTypes = {
   videos: PropTypes.objectOf(PropTypes.any).isRequired,

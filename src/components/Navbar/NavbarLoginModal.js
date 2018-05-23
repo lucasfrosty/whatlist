@@ -17,32 +17,36 @@ const BrandText = styled.p`
 `;
 
 
-const NavbarLoginModal = ({ loginWithProvider }) => (
-  <Modal size="mini" trigger={<Button color="blue">Login</Button>}>
-    <Modal.Content>
-      <BrandContainer>
-        <Image src={Popcorn} style={{ margin: 'auto', width: 45 }} />
-        <BrandText>
-          <strong>what</strong>list
-        </BrandText>
-      </BrandContainer>
+function NavbarLoginModal({ loginWithProvider }) {
+  return (
+    <Modal size="mini" trigger={<Button color="blue">Login</Button>}>
+      <Modal.Content>
+        <BrandContainer>
+          <Image src={Popcorn} style={{ margin: 'auto', width: 45 }} />
+          <BrandText>
+            <strong>what</strong>list
+          </BrandText>
+        </BrandContainer>
 
-      <Form size="large">
-        <Form.Input fluid icon="user" iconPosition="left" placeholder="E-mail address" />
-        <Form.Input fluid icon="lock" iconPosition="left" placeholder="Password" type="password" />
-        <Button color="blue" fluid disabled size="large">
-          Login
-        </Button>
-      </Form>
-      <Divider horizontal>Or you can login with:</Divider>
-      <div style={{ textAlign: 'center' }}>
-        <Button circular color="facebook" icon="facebook" onClick={() => loginWithProvider('facebook')} />
-        <Button circular color="google plus" icon="google" onClick={() => loginWithProvider('google')} />
-        <Button circular color="twitter" icon="twitter" onClick={() => loginWithProvider('twitter')} />
-      </div>
-    </Modal.Content>
-  </Modal>
-);
+        <Form size="large">
+          <Form.Input fluid icon="user" iconPosition="left" placeholder="E-mail address" />
+          <Form.Input fluid icon="lock" iconPosition="left" placeholder="Password" type="password" />
+          <Button color="blue" fluid disabled size="large">
+            Login
+          </Button>
+        </Form>
+
+        <Divider horizontal>Or you can login with:</Divider>
+
+        <div style={{ textAlign: 'center' }}>
+          <Button circular color="facebook" icon="facebook" onClick={() => loginWithProvider('facebook')} />
+          <Button circular color="google plus" icon="google" onClick={() => loginWithProvider('google')} />
+          <Button circular color="twitter" icon="twitter" onClick={() => loginWithProvider('twitter')} />
+        </div>
+      </Modal.Content>
+    </Modal>
+  );
+}
 
 NavbarLoginModal.propTypes = {
   loginWithProvider: PropTypes.func.isRequired,

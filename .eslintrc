@@ -1,6 +1,7 @@
 {
   "extends": "@lucasfrosty/eslint-config",
   "rules": {
-    "no-process-env": "off"
+    "no-process-env": "off",
+    "no-console": "warn"
   }
 }

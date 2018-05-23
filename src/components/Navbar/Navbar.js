@@ -33,7 +33,7 @@ class Navbar extends React.Component {
 
   static defaultProps = {
     user: null,
-  }
+  };
 
   state = {
     isFetchingData: false,
@@ -41,17 +41,20 @@ class Navbar extends React.Component {
 
   loginWithProvider = (provider) => {
     let prov;
-    if (provider === 'google') prov = googleProvider;
-    else if (provider === 'twitter') prov = twitterProvider;
-    else {
+    if (provider === 'google') {
+      prov = googleProvider;
+    } else if (provider === 'twitter') {
+      prov = twitterProvider;
+    } else {
       prov = facebookProvider;
     }
 
-    firebase.auth().signInWithPopup(prov).then((result) => {
-      this.props.onUserLogin({
-        user: result.user.providerData[0],
-      });
-    })
+    firebase.auth().signInWithPopup(prov)
+      .then((result) => {
+        this.props.onUserLogin({
+          user: result.user.providerData[0],
+        });
+      })
       .catch((err) => {
         console.log(err);
       });
@@ -61,37 +64,37 @@ class Navbar extends React.Component {
     firebase.auth().signOut()
       .then(() => {
         this.props.onUserLogoff();
-      }).catch((err) => {
+      })
+      .catch((err) => {
         console.error(err);
       });
   };
 
-  fetchData = (inputValue, type) => {
-    getAPIData(inputValue, type, 'query')
-      .then(arrayResponse => arrayResponse[0])
-      .then((response) => {
-        this.props.history.push(`/details/${type}/${response.id}`);
-      });
+  fetchData = async (inputValue, type) => {
+    const arrayResponse = await getAPIData(inputValue, type, 'query');
+    const firstItemOnResponse = arrayResponse[0];
+    this.props.history.push(`/details/${type}/${firstItemOnResponse.id}`);
   };
 
+  displayLoginOrProfileButton = () => (
+    this.props.user === null
+      ? <NavbarLoginModal loginWithProvider={this.loginWithProvider} />
+      : <NavbarUserInfo user={this.props.user} logout={this.logout} />
+  );
+
   render() {
-    const { user } = this.props;
-    const { isFetchingData } = this.state;
     return (
       <Menu fixed="top">
         <Container>
           <NavbarBrand />
           <Menu.Item style={searchItemStyle}>
-            <NavbarSearchInput fetchData={this.fetchData} isFetchingData={isFetchingData} />
+            <NavbarSearchInput
+              fetchData={this.fetchData}
+              isFetchingData={this.state.isFetchingData}
+            />
           </Menu.Item>
           <Menu.Item>
-            {user !== null ? (
-              <NavbarUserInfo user={user} logout={this.logout} />
-            ) : (
-              <NavbarLoginModal
-                loginWithProvider={this.loginWithProvider}
-              />
-            )}
+            {this.displayLoginOrProfileButton()}
           </Menu.Item>
         </Container>
       </Menu>
@@ -99,9 +102,11 @@ class Navbar extends React.Component {
   }
 }
 
-const mapStateToProps = state => ({
-  user: state.user,
-});
+function mapStateToProps(state) {
+  return {
+    user: state.user,
+  };
+}
 
 const mapDispatchToProps = {
   onUserLogin: userLogin,

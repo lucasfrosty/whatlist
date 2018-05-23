@@ -1,11 +1,15 @@
 import { USER_LOGIN, USER_LOGOFF } from './types';
 
 // set auth actions
-export const userLogin = payload => ({
-  type: USER_LOGIN,
-  payload,
-});
+export function userLogin(payload) {
+  return {
+    payload,
+    type: USER_LOGIN,
+  };
+}
 
-export const userLogoff = () => ({
-  type: USER_LOGOFF,
-});
+export function userLogoff() {
+  return {
+    type: USER_LOGOFF,
+  };
+}

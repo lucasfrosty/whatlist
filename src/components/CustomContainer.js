@@ -8,7 +8,9 @@ const containerStyles = {
   marginTop: 80,
 };
 
-const CustomContainer = ({ children }) => <Container style={containerStyles}>{children}</Container>;
+function CustomContainer({ children }) {
+  return <Container style={containerStyles}>{children}</Container>;
+}
 
 CustomContainer.propTypes = {
   children: PropTypes.oneOfType([

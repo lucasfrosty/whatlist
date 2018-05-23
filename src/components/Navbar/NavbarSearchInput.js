@@ -9,7 +9,7 @@ const Form = styled.form`
   }
 `;
 
-const NavbarSearchInput = ({ fetchData, isFetchingData }) => {
+function NavbarSearchInput({ fetchData, isFetchingData }) {
   let input;
   let dropdown;
 
@@ -18,8 +18,8 @@ const NavbarSearchInput = ({ fetchData, isFetchingData }) => {
     { key: 'tv', text: 'TV Show', value: 'tv' },
   ];
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
+  function handleSubmit(evt) {
+    evt.preventDefault();
     const { value } = input.inputRef;
     const type = dropdown.getSelectedItem().key;
 
@@ -27,14 +27,16 @@ const NavbarSearchInput = ({ fetchData, isFetchingData }) => {
       fetchData(value, type);
       input.inputRef.value = '';
     }
-  };
+  }
+
+  const inputIcon = isFetchingData ? '' : 'search';
 
   return (
     <Form onSubmit={handleSubmit}>
       <Input
         className="parent-input-div"
         loading={isFetchingData}
-        icon={!isFetchingData ? 'search' : ''}
+        icon={inputIcon}
         iconPosition="left"
         placeholder="Search for..."
         ref={(ref) => {
@@ -57,7 +59,7 @@ const NavbarSearchInput = ({ fetchData, isFetchingData }) => {
       />
     </Form>
   );
-};
+}
 
 NavbarSearchInput.propTypes = {
   fetchData: PropTypes.func.isRequired,

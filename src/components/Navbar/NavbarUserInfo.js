@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { withRouter } from 'react-router-dom';
 import { Image, Dropdown, Button } from 'semantic-ui-react';
 
-const NavbarUserInfo = ({ user, logout, history }) => {
+function NavbarUserInfo({ user, logout, history }) {
   const trigger = (
     <span>
       <Image src={user.photoURL} avatar />
@@ -55,7 +55,7 @@ const NavbarUserInfo = ({ user, logout, history }) => {
   ];
 
   return <Dropdown trigger={trigger} options={options} pointing="top right" icon={null} />;
-};
+}
 
 NavbarUserInfo.propTypes = {
   history: PropTypes.objectOf(PropTypes.any).isRequired,

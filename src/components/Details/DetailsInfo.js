@@ -1,3 +1,4 @@
+/* eslint-disable camelcase */
 import React from 'react';
 import styled from 'styled-components';
 import PropTypes from 'prop-types';
@@ -63,7 +64,7 @@ const AditionalInfoContainer = styled.div`
   justify-content: space-between;
 `;
 
-const DetailsInfo = ({
+function DetailsInfo({
   info,
   type,
   addToWhatlist,
@@ -72,7 +73,7 @@ const DetailsInfo = ({
   removeOfWhatlist,
   isFetchingData,
   setIsFetchingDataToTrue,
-}) => {
+}) {
   const {
     name,
     title,
@@ -91,13 +92,15 @@ const DetailsInfo = ({
 
   /* getting only the names of the genres
    * i did this because the API provide both "name" and "id", and i just will display the name */
-  const genresName = genres.map(genre => genre.name).join(', ');
+  const genresName = genres.map((genre) => genre.name).join(', ');
 
   // formating the revenue into regular money formation (using dollar sign)
-  const formatRevenue = rev => (rev ? convertMoney.format(rev) : '-');
+  function formatRevenue(rev) {
+    return (rev ? convertMoney.format(rev) : '-');
+  }
 
-  const addToWhatlistClickHandler = () => {
-    setIsFetchingDataToTrue(); // func to create the spinner effect on the button
+  function addToWhatlistClickHandler() {
+    setIsFetchingDataToTrue();
     addToWhatlist({
       id,
       title: title || '',
@@ -106,12 +109,34 @@ const DetailsInfo = ({
       type,
       poster_path,
     });
-  };
+  }
 
-  const removeToWhatlistClickHandler = () => {
-    setIsFetchingDataToTrue(); // func to create the spinner effect on the button
+  function removeToWhatlistClickHandler() {
+    setIsFetchingDataToTrue();
     removeOfWhatlist(keyOnWhatlist);
-  };
+  }
+
+  const showReleaseDate = (
+    release_date
+      ? `Released in ${convertDate(release_date)}`
+      : `First release in ${convertDate(first_air_date)}`
+  );
+
+  const showEpisodeRunTime = (
+    episode_run_time || runtime
+      ? `${runtime || episode_run_time[0]} mins`
+      : '-'
+  );
+
+  const showBoxOfficeOrStatus = (
+    type === 'movie'
+      ? <DetailsAditionalInfo title="Box Office" content={formatRevenue(revenue)} />
+      : <DetailsAditionalInfo title="Status" content={status} />
+  );
+
+  function showSpinnerOr(iconName) {
+    return isFetchingData ? 'spinner' : iconName;
+  }
 
   return (
     <InfoContainer>
@@ -125,9 +150,7 @@ const DetailsInfo = ({
         <Title>{name || title}</Title>
         {(release_date || first_air_date) && (
           <ReleaseDate>
-            {release_date
-              ? `Released in ${convertDate(release_date)}`
-              : `First release in ${convertDate(first_air_date)}`}
+            {showReleaseDate}
           </ReleaseDate>
         )}
         <Overview>{overview}</Overview>
@@ -139,13 +162,9 @@ const DetailsInfo = ({
           <DetailsAditionalInfo title="Genres" content={genresName} />
           <DetailsAditionalInfo
             title="Runtime"
-            content={episode_run_time || runtime ? `${runtime || episode_run_time[0]} mins` : '-'}
+            content={showEpisodeRunTime}
           />
-          {type === 'movie' ? (
-            <DetailsAditionalInfo title="Box Office" content={formatRevenue(revenue)} />
-          ) : (
-            <DetailsAditionalInfo title="Status" content={status} />
-          )}
+          {showBoxOfficeOrStatus}
 
           {auth &&
             !keyOnWhatlist && (
@@ -157,7 +176,7 @@ const DetailsInfo = ({
               >
                 <Icon
                   loading={isFetchingData}
-                  name={isFetchingData ? 'spinner' : 'plus'}
+                  name={showSpinnerOr('plus')}
                   style={{ fontSize: 14 }}
                 />
                 <span style={{ letterSpacing: 0.8, fontSize: 12 }}>ADD TO WHATLIST</span>
@@ -174,7 +193,7 @@ const DetailsInfo = ({
               >
                 <Icon
                   loading={isFetchingData}
-                  name={isFetchingData ? 'spinner' : 'trash'}
+                  name={showSpinnerOr('trash')}
                   style={{ fontSize: 14 }}
                 />
                 <span style={{ letterSpacing: 0.8, fontSize: 12 }}>REMOVE FROM WHATLIST</span>
@@ -184,7 +203,7 @@ const DetailsInfo = ({
       </InfoItem>
     </InfoContainer>
   );
-};
+}
 
 DetailsInfo.propTypes = {
   type: PropTypes.string.isRequired,

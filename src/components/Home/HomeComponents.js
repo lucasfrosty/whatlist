@@ -5,10 +5,12 @@ import { Tab, Button, Container } from 'semantic-ui-react';
 import Card from '../Card/Card';
 import CardContainer from '../Card/CardContainer';
 
-const HomeComponent = ({ popularMoviesInfo, popularTVInfo }) => {
-  const renderTabPane = (content) => {
-    const displayCards = contentArray =>
-      contentArray.map(movie => <Card key={movie.id} info={movie} />);
+function HomeComponent({ popularMoviesInfo, popularTVInfo }) {
+  function renderTabPane(content) {
+    function displayCards(contentArray) {
+      return contentArray.map((movie) => <Card key={movie.id} info={movie} />);
+    }
+
     const shouldDisplayContent = (content === undefined);
 
     return (
@@ -16,7 +18,7 @@ const HomeComponent = ({ popularMoviesInfo, popularTVInfo }) => {
         {shouldDisplayContent || <CardContainer>{displayCards(content)}</CardContainer>}
       </Tab.Pane>
     );
-  };
+  }
 
   const panes = [
     {
@@ -46,7 +48,7 @@ const HomeComponent = ({ popularMoviesInfo, popularTVInfo }) => {
       />
     </Container>
   );
-};
+}
 
 HomeComponent.defaultProps = {
   popularMoviesInfo: undefined,
