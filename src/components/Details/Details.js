@@ -46,14 +46,18 @@ class Details extends React.Component {
    * @param {object} info - the content basic information (just what'll be displayed on the card)
    * @memberof Details
    */
-  addToWhatlist = (info) => {
-    firebase
-      .database()
-      .ref(this.props.user.uid)
-      .push()
-      .set(info)
-      .then(() => this.setState({ isFetchingData: false }))
-      .catch((err) => console.error(err));
+  addToWhatlist = async (info) => {
+    try {
+      const ref = await firebase.database().ref(this.props.user.uid).push();
+      await ref.set(info);
+
+      this.setState({
+        isFetchingData: false,
+        keyOnWhatlist: ref.key,
+      });
+    } catch (err) {
+      console.error(err);
+    }
   };
 
   /**
@@ -67,7 +71,10 @@ class Details extends React.Component {
       .ref(this.props.user.uid)
       .child(key)
       .remove()
-      .then(() => this.setState({ isFetchingData: false }))
+      .then(() => this.setState({
+        isFetchingData: false,
+        keyOnWhatlist: null,
+      }))
       .catch((err) => console.error(err));
   };
 

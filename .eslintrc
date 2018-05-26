@@ -2,7 +2,6 @@
   "extends": "@lucasfrosty/eslint-config",
   "rules": {
     "no-process-env": "off",
-    "no-console": "warn",
-    "jsx-a11y/href-no-hash": "off"
+    "no-console": "warn"
   }
 }
