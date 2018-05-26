@@ -6,7 +6,7 @@ import { loadState, saveState } from './utils/localStorage';
 // import mainSaga from './dataflow/saga';
 import reducer from './dataflow/reducer';
 
-const configureStore = () => {
+function configureStore() {
   const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
 
   const sagaMiddleware = createSagaMiddleware();
@@ -24,7 +24,7 @@ const configureStore = () => {
   // sagaMiddleware.run(mainSaga);
 
   return store;
-};
+}
 
 
 export default configureStore;
