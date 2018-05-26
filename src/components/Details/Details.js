@@ -78,7 +78,7 @@ class Details extends React.Component {
       .catch((err) => console.error(err));
   };
 
-  componentDidMount() {
+  getDetailsData = () => {
     const { id, type } = this.props.match.params;
     getAPIData(id, type, 'id').then(async (info) => {
       let keyOnWhatlist = null;
@@ -98,17 +98,24 @@ class Details extends React.Component {
       }
 
     }).catch((err) => console.error(err));
+  };
+
+  componentDidMount() {
+    this.getDetailsData();
   }
 
   componentDidUpdate(prevProps) {
     const { id, type } = this.props.match.params;
 
-    if (id !== prevProps.match.params.id && type !== prevProps.match.params.id) {
-      getAPIData(id, type, 'id')
-        .then((res) => {
-          this.setState({ info: res });
-        })
-        .catch((err) => console.error(err));
+    if (
+      (id !== prevProps.match.params.id) ||
+      (type !== prevProps.match.params.type)
+    ) {
+      /* eslint-disable react/no-did-update-set-state */
+      this.setState(
+        { info: undefined },
+        this.getDetailsData(),
+      );
     }
   }
 

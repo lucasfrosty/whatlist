@@ -19,6 +19,14 @@ class Whatlist extends React.Component {
     isFetchingData: true,
   };
 
+  removeButtonHandler = (key) => {
+    firebase
+      .database()
+      .ref(this.props.userId)
+      .child(key)
+      .remove();
+  };
+
   componentDidMount() {
     firebase
       .database()
@@ -31,45 +39,45 @@ class Whatlist extends React.Component {
       });
   }
 
-  removeButtonHandler = (key) => {
-    firebase
-      .database()
-      .ref(this.props.userId)
-      .child(key)
-      .remove();
-  };
-
   render() {
     const { isFetchingData, firebaseData } = this.state;
     const isFirebaseDataAnEmptyObject =
-      Object.keys(firebaseData).length === 0 && firebaseData.constructor === Object;
+      (Object.keys(firebaseData).length === 0) && (firebaseData.constructor === Object);
 
-    return !isFetchingData ? (
-      <CustomContainer>
-        {isFirebaseDataAnEmptyObject ? (
-          <EmptyWhatlistMsg />
-        ) : (
-          <CardContainer>
-            {Object.keys(firebaseData).map(key => (
-              <Card
-                showRemoveButton
-                key={key}
-                objKey={key}
-                info={firebaseData[key]}
-                removeButtonHandler={this.removeButtonHandler}
-              />
-            ))}
-          </CardContainer>
-        )}
-      </CustomContainer>
-    ) : (
-      <LoadingSpinner />
+    const whatlist = (
+      isFirebaseDataAnEmptyObject
+      ? <EmptyWhatlistMsg />
+      : (
+        <CardContainer>
+          {Object.keys(firebaseData).map((key) => (
+            <Card
+              showRemoveButton
+              key={key}
+              objKey={key}
+              info={firebaseData[key]}
+              removeButtonHandler={this.removeButtonHandler}
+            />
+          ))}
+        </CardContainer>
+      )
+    );
+
+    return (
+      isFetchingData
+      ? <LoadingSpinner />
+      : (
+        <CustomContainer>
+          {whatlist}
+        </CustomContainer>
+      )
     );
   }
 }
 
-const mapStateToProps = state => ({
-  userId: state.user.uid,
-});
+function mapStateToProps(state) {
+  return {
+    userId: state.user.uid,
+  };
+}
 
 export default connect(mapStateToProps, null)(Whatlist);
