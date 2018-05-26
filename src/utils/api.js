@@ -14,31 +14,32 @@ export const TYPES = {
  * @param {string: 'movie' or 'tv'} type - Defining if it is a Movie or a TV Show
  * @returns {string} - The API URL for the query passed by
  */
-export const getAPIData = async (query, type, selector) => {
+export async function getAPIData(query, type, selector) {
   try {
     const queryURL = `https://api.themoviedb.org/3/search/${type}?api_key=${API_KEY}&query=${query}&page=1`;
     const idURL = `https://api.themoviedb.org/3/${type}/${query}?&api_key=${API_KEY}&append_to_response=videos`;
-    const URL = (selector === 'query' ? queryURL : idURL);
+    const url = (selector === 'query' ? queryURL : idURL);
 
-    const response = await axios(URL);
+    const response = await axios(url);
     const results = response.data.results || response.data;
 
     return results;
-  } catch (e) {
-    console.error(e);
+  } catch (err) {
+    console.error(err);
   }
 
   return null;
-};
+}
 
 
 /**
- * @param {string} image_path - the path (provided for the API itself) for the image
+ * @param {string} imagePath - the path (provided for the API itself) for the image
  * @param {number} size - the size of the image
  * @returns {string} - The image URL
  */
-export const getImage = (image_path, size) =>
-  `https://image.tmdb.org/t/p/w${size}${image_path}`;
+export function getImage(imagePath, size) {
+  return `https://image.tmdb.org/t/p/w${size}${imagePath}`;
+}
 
 
 // export const convertGenresArray = async (genresArray, type) => {
@@ -57,23 +58,23 @@ export const getImage = (image_path, size) =>
 //   }
 // };
 
-export const getPopular = async (type) => {
+export async function getPopular(type) {
   try {
-    const URL =
+    const url =
       `https://api.themoviedb.org/3/${type}/popular?api_key=${API_KEY}&language=en-US&page=1`;
 
-    const response = await axios(URL);
+    const response = await axios(url);
     const results = await response.data.results;
 
-    const resultsWithType = results.map(r => ({
-      ...r,
+    const resultsWithType = results.map((result) => ({
+      ...result,
       type,
     }));
 
     return Promise.all(resultsWithType);
-  } catch (e) {
-    console.error(e);
+  } catch (err) {
+    console.error(err);
   }
 
   return null;
-};
+}
