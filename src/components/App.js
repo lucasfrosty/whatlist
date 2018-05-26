@@ -9,7 +9,7 @@ import Whatlist from './Whatlist/Whatlist';
 
 function App() {
   return (
-    <BrowserRouter basename={process.env.PUBLIC_URL}>
+    <BrowserRouter>
       <Fragment>
         <Navbar />
         <Switch>
