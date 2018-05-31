@@ -10,6 +10,17 @@ const Form = styled.form`
   .ui.action.left.icon.input.parent-input-div > input {
     width: 150px;
   }
+
+  input::-webkit-calendar-picker-indicator {
+    display: none;
+  }
+`;
+
+const Datalist = styled.datalist`
+  color: red;
+  option {
+    color: red;
+  }
 `;
 
 class NavbarSearchInput extends Component {
@@ -28,6 +39,8 @@ class NavbarSearchInput extends Component {
 
     if (value) {
       this.fetchTypeaheadContent(value, type);
+    } else {
+      this.setState({ typeaheadData: undefined });
     }
   };
 
@@ -58,14 +71,14 @@ class NavbarSearchInput extends Component {
 
   renderDatalist = () => {
     const { typeaheadData } = this.state;
-    console.log(typeaheadData);
+
     if (typeaheadData !== undefined && typeaheadData.length > 0) {
       return (
-        <datalist id="content">
+        <Datalist id="content">
           {typeaheadData.map(({ name, title, id }) => (
             <option key={id} value={name || title} />
           ))}
-        </datalist>
+        </Datalist>
       );
     }
 
