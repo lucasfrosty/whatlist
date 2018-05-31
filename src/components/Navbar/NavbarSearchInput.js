@@ -1,7 +1,10 @@
-import React from 'react';
+import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { Input, Dropdown } from 'semantic-ui-react';
+import { Input, Dropdown, Icon } from 'semantic-ui-react';
+import { withRouter } from 'react-router-dom';
 import styled from 'styled-components';
+
+import { getAPIData } from '../../utils/api';
 
 const Form = styled.form`
   .ui.action.left.icon.input.parent-input-div > input {
@@ -9,61 +12,117 @@ const Form = styled.form`
   }
 `;
 
-function NavbarSearchInput({ fetchData, isFetchingData }) {
-  let input;
-  let dropdown;
+class NavbarSearchInput extends Component {
+  state = {
+    typeaheadData: undefined,
+  };
 
-  const options = [
+  options = [
     { key: 'movie', text: 'Movie', value: 'movie' },
     { key: 'tv', text: 'TV Show', value: 'tv' },
   ];
 
-  function handleSubmit(evt) {
-    evt.preventDefault();
-    const { value } = input.inputRef;
-    const type = dropdown.getSelectedItem().key;
+  handleInputChange = () => {
+    const { value } = this.input.inputRef;
+    const type = this.dropdown.getSelectedItem().key;
 
     if (value) {
-      fetchData(value, type);
-      input.inputRef.value = '';
+      this.fetchTypeaheadContent(value, type);
     }
-  }
+  };
 
-  const inputIcon = isFetchingData ? '' : 'search';
+  fetchSelectedContent = async (inputValue, type) => {
+    const arrayResponse = await getAPIData(inputValue, type, 'query');
+    const firstItemOnResponse = arrayResponse[0];
+    this.props.history.push(`/details/${type}/${firstItemOnResponse.id}`);
+  };
 
-  return (
-    <Form onSubmit={handleSubmit}>
-      <Input
-        className="parent-input-div"
-        loading={isFetchingData}
-        icon={inputIcon}
-        iconPosition="left"
-        placeholder="Search for..."
-        ref={(ref) => {
-          input = ref;
-        }}
-        action={
+
+  fetchTypeaheadContent = async (inputValue, type) => {
+    const arrayResponse = await getAPIData(inputValue, type, 'query');
+    const typeaheadData = arrayResponse.slice(0, 5);
+
+    this.setState({ typeaheadData });
+  };
+
+  handleSubmit = (evt) => {
+    evt.preventDefault();
+    const { value } = this.input.inputRef;
+    const type = this.dropdown.getSelectedItem().key;
+
+    if (value) {
+      this.fetchSelectedContent(value, type);
+      this.input.inputRef.value = '';
+    }
+  };
+
+  renderDatalist = () => {
+    const { typeaheadData } = this.state;
+    console.log(typeaheadData);
+    if (typeaheadData !== undefined && typeaheadData.length > 0) {
+      return (
+        <datalist id="content">
+          {typeaheadData.map(({ name, title, id }) => (
+            <option key={id} value={name || title} />
+          ))}
+        </datalist>
+      );
+    }
+
+    return null;
+  };
+
+  render() {
+    const { isFetchingData } = this.props;
+    const inputIcon = isFetchingData ? '' : 'search';
+    return (
+      <Form onSubmit={this.handleSubmit}>
+        <Input
+          className="parent-input-div"
+          loading={isFetchingData}
+          iconPosition="left"
+          ref={(ref) => {
+            this.input = ref;
+          }}
+          action={
+            <Dropdown
+              button
+              basic
+              size="mini"
+              floating
+              className="white-dropdown"
+              options={this.options}
+              defaultValue="movie"
+              ref={(ref) => {
+                this.dropdown = ref;
+              }}
+            />
+          }
+        >
+          <Icon name={inputIcon} />
+          <input type="text" list="content" onChange={this.handleInputChange} />
+          {this.renderDatalist()}
           <Dropdown
             button
             basic
             size="mini"
             floating
             className="white-dropdown"
-            options={options}
+            options={this.options}
             defaultValue="movie"
             ref={(ref) => {
-              dropdown = ref;
+              this.dropdown = ref;
             }}
           />
-        }
-      />
-    </Form>
-  );
+        </Input>
+      </Form>
+    );
+  }
 }
 
 NavbarSearchInput.propTypes = {
-  fetchData: PropTypes.func.isRequired,
   isFetchingData: PropTypes.bool.isRequired,
+  history: PropTypes.objectOf(PropTypes.any).isRequired,
 };
 
-export default NavbarSearchInput;
+export default withRouter(NavbarSearchInput);

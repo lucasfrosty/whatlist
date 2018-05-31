@@ -1,7 +1,6 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import * as firebase from 'firebase';
-import { withRouter } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import { Container, Menu } from 'semantic-ui-react';
 
@@ -11,7 +10,6 @@ import NavbarLoginModal from './NavbarLoginModal';
 import NavbarUserInfo from './NavbarUserInfo';
 import NavbarSearchInput from './NavbarSearchInput';
 
-import { getAPIData } from '../../utils/api';
 import { userLogin, userLogoff } from '../../dataflow/actions';
 import { facebookProvider, googleProvider, twitterProvider } from '../../utils/firebase';
 
@@ -28,7 +26,6 @@ class Navbar extends React.Component {
     user: PropTypes.objectOf(PropTypes.any),
     onUserLogin: PropTypes.func.isRequired,
     onUserLogoff: PropTypes.func.isRequired,
-    history: PropTypes.objectOf(PropTypes.any).isRequired,
   };
 
   static defaultProps = {
@@ -70,12 +67,6 @@ class Navbar extends React.Component {
       });
   };
 
-  fetchData = async (inputValue, type) => {
-    const arrayResponse = await getAPIData(inputValue, type, 'query');
-    const firstItemOnResponse = arrayResponse[0];
-    this.props.history.push(`/details/${type}/${firstItemOnResponse.id}`);
-  };
-
   displayLoginOrProfileButton = () => (
     this.props.user === null
       ? <NavbarLoginModal loginWithProvider={this.loginWithProvider} />
@@ -88,10 +79,7 @@ class Navbar extends React.Component {
         <Container>
           <NavbarBrand />
           <Menu.Item style={searchItemStyle}>
-            <NavbarSearchInput
-              fetchData={this.fetchData}
-              isFetchingData={this.state.isFetchingData}
-            />
+            <NavbarSearchInput isFetchingData={this.state.isFetchingData} />
           </Menu.Item>
           <Menu.Item>
             {this.displayLoginOrProfileButton()}
@@ -113,4 +101,4 @@ const mapDispatchToProps = {
   onUserLogoff: userLogoff,
 };
 
-export default withRouter(connect(mapStateToProps, mapDispatchToProps)(Navbar));
+export default connect(mapStateToProps, mapDispatchToProps)(Navbar);
