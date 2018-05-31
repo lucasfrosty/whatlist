@@ -24,6 +24,7 @@ const Datalist = styled.datalist`
 `;
 
 class NavbarSearchInput extends Component {
+  timeout = null;
   state = {
     typeaheadData: undefined,
   };
@@ -37,8 +38,14 @@ class NavbarSearchInput extends Component {
     const { value } = this.input.inputRef;
     const type = this.dropdown.getSelectedItem().key;
 
+    if (this.timeout) {
+      clearTimeout(this.timeout);
+    }
+
     if (value) {
-      this.fetchTypeaheadContent(value, type);
+      setTimeout(() => {
+        this.fetchTypeaheadContent(value, type);
+      }, 800);
     } else {
       this.setState({ typeaheadData: undefined });
     }
@@ -113,7 +120,7 @@ class NavbarSearchInput extends Component {
           }
         >
           <Icon name={inputIcon} />
-          <input type="text" list="content" onChange={this.handleInputChange} />
+          <input type="text" list="content" onKeyUp={this.handleInputChange} />
           {this.renderDatalist()}
           <Dropdown
             button
