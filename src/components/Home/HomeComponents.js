@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { Tab, Button, Container } from 'semantic-ui-react';
 
-import Card from '../Card/Card';
+import Card from '../Card';
 import CardContainer from '../Card/CardContainer';
 
 function HomeComponent({ popularMoviesInfo, popularTVInfo }) {

@@ -4,7 +4,7 @@ import * as firebase from 'firebase';
 import { connect } from 'react-redux';
 
 import LoadingSpinner from '../LoadingSpinner';
-import Card from '../Card/Card';
+import Card from '../Card';
 import CardContainer from '../Card/CardContainer';
 import CustomContainer from '../CustomContainer';
 import EmptyWhatlistMsg from './EmptyWhatlistMsg';

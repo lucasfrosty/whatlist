@@ -2,23 +2,23 @@ import React, { Fragment } from 'react';
 import { BrowserRouter, Route, Switch } from 'react-router-dom';
 import Loadable from 'react-loadable';
 
-import Navbar from './Navbar/Navbar';
+import Navbar from './Navbar';
 import ProtectedRoute from './ProtectedRoute';
 import Loading from './LoadingSpinner';
 
 
 const Home = Loadable({
-  loader: () => import('./Home/Home'),
+  loader: () => import('./Home'),
   loading: Loading,
 });
 
 const Details = Loadable({
-  loader: () => import('./Details/Details'),
+  loader: () => import('./Details'),
   loading: Loading,
 });
 
 const Whatlist = Loadable({
-  loader: () => import('./Whatlist/Whatlist'),
+  loader: () => import('./Whatlist'),
   loading: Loading,
 });
 
