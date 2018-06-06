@@ -1,11 +1,27 @@
 import React, { Fragment } from 'react';
 import { BrowserRouter, Route, Switch } from 'react-router-dom';
+import Loadable from 'react-loadable';
 
-import Home from './Home/Home';
 import Navbar from './Navbar/Navbar';
-import Details from './Details/Details';
 import ProtectedRoute from './ProtectedRoute';
-import Whatlist from './Whatlist/Whatlist';
+import Loading from './LoadingSpinner';
+
+
+const Home = Loadable({
+  loader: () => import('./Home/Home'),
+  loading: Loading,
+});
+
+const Details = Loadable({
+  loader: () => import('./Details/Details'),
+  loading: Loading,
+});
+
+const Whatlist = Loadable({
+  loader: () => import('./Whatlist/Whatlist'),
+  loading: Loading,
+});
+
 
 function App() {
   return (
